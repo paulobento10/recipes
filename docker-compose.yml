@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  postgres:
+    build:
+      context: '.'
+      dockerfile: './postgres/Dockerfile'
+    ports:
+      - '5432-5432' #porta do postgres
+    networks: 
+      - 'recipes' #rede de ligação do docker 
+    volumes:
+      - 'postgresData' # volume para a base de dados
+  go: # imagem para go
+    build:
+      context: '.'
+      dockerfile: './go/Dockerfile'
+    depends_on:
+     - 'postgres'
+    ports:
+      - '8080:8080'
+    networks: 
+      - 'recipes'
+    volumes:
+      - './go/app:/home/go'
+  react:
+    build:
+      context: '.'
+      dockerfile: './react/Dockerfile'
+    depends_on:
+      - 'go'
+    ports:
+      - '3000:3000'
+    networks: 
+      - 'recipes'
+    volumes:
+      - './react/react-app/:/home/react/react-app'
+volumes:
+  postgresData: {}
+
+networks: # cria network
+  recipes:
