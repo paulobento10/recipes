@@ -7,8 +7,8 @@ services:
       dockerfile: './postgres/Dockerfile'
     ports:
       - '5432-5432' #porta do postgres
-    networks: 
-      - 'recipes' #rede de ligação do docker 
+    networks:
+      - 'recipes' #rede de ligação do docker
     volumes:
       - 'postgresData' # volume para a base de dados
   go: # imagem para go
@@ -19,7 +19,7 @@ services:
      - 'postgres'
     ports:
       - '8080:8080'
-    networks: 
+    networks:
       - 'recipes'
     volumes:
       - './go/app:/home/go'
@@ -29,9 +29,10 @@ services:
       dockerfile: './react/Dockerfile'
     depends_on:
       - 'go'
+      - 'postgres'
     ports:
       - '3000:3000'
-    networks: 
+    networks:
       - 'recipes'
     volumes:
       - './react/react-app/:/home/react/react-app'
