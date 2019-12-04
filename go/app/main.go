@@ -1,9 +1,9 @@
 package main
 
 import (
-	/*"encoding/json"
+	//"encoding/json"
 	"fmt"
-	"io/ioutil"
+	/*"io/ioutil"
 	"log"
 	"net/http"
 
@@ -23,5 +23,5 @@ const (
 )
 
 func main() {
-
+	fmt.Println("O joao vai ser vegan em 2020.")
 }
