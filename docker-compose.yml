@@ -5,12 +5,17 @@ services:
     build:
       context: '.'
       dockerfile: './postgres/Dockerfile'
+    environment: # variaveis de ambiente
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: recipes
     ports:
       - '5432-5432' #porta do postgres
     networks:
       - 'recipes' #rede de ligação do docker
     volumes:
       - 'postgresData' # volume para a base de dados
+      #- './postgres:/docker-entrypoint-initdb.d'
   go: # imagem para go
     build:
       context: '.'
@@ -18,24 +23,28 @@ services:
     depends_on:
      - 'postgres'
     ports:
-      - '8080:8080'
+      - '8000:8000'
     networks:
       - 'recipes'
     volumes:
-      - './go/app:/home/go'
-  react:
-    build:
-      context: '.'
-      dockerfile: './react/Dockerfile'
-    depends_on:
-      - 'go'
-      - 'postgres'
-    ports:
-      - '3000:3000'
-    networks:
-      - 'recipes'
-    volumes:
-      - './react/react-app/:/home/react/react-app'
+      - './go/app:/go/src/github.com/app/restapi'
+    #environment:
+    #  - DEBUG = true
+    links:
+      - postgres
+#  react:
+#    build:
+#      context: '.'
+#      dockerfile: './react/Dockerfile'
+#    depends_on:
+#      - 'go'
+#      - 'postgres'
+#    ports:
+#      - '3000:3000'
+#    networks:
+#      - 'recipes'
+#    volumes:
+#      - './react/react-app/:/home/react/react-app'
 volumes:
   postgresData: {}
 
