@@ -50,6 +50,7 @@ const useStyles = makeStyles(theme => ({
 function SignUp() {
   const [isSignedUp, setSignedUp] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setAuthTokens } = useAuth();
@@ -99,6 +100,10 @@ function SignUp() {
                 fullWidth
                 id="name"
                 label="Name"
+                value={name}
+                onChange={e => {
+                  setName(e.target.value);
+                }}
                 autoFocus
               />
             </Grid>
@@ -110,6 +115,10 @@ function SignUp() {
                 id="email"
                 label="Email Address"
                 name="email"
+                value={email}
+                onChange={e => {
+                  setEmail(e.target.value);
+                }}
                 autoComplete="email"
               />
             </Grid>
@@ -122,6 +131,10 @@ function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                value={password}
+                onChange={e => {
+                  setPassword(e.target.value);
+                }}
                 autoComplete="current-password"
               />
             </Grid>
