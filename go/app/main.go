@@ -115,6 +115,19 @@ func deleteUser(id string) bool {
 	return true
 }
 
+func editUser(user User) bool {
+
+	db := openConnDB()
+	tx := db.MustBegin()
+	tx.NamedExec("UPDATE users SET user_name=:user_name, email=:email, password=:password WHERE user_id=:user_id", &user)
+	err := tx.Commit()
+	if err != nil {
+		return false
+	}
+	closeConnDB(db)
+	return true
+}
+
 func insert(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var user User
@@ -132,6 +145,17 @@ func delete(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 	result := deleteUser(vars["id"])
+	j, _ := json.Marshal(result)
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}
+
+func edit(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var user User
+	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	json.NewDecoder(r.Body).Decode(&user)
+	result := editUser(user)
 	j, _ := json.Marshal(result)
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
@@ -160,6 +184,7 @@ func main() {
 	r.HandleFunc("/api/insertUser", insert).Methods("POST")
 	r.HandleFunc("/api/searchUser/id/{id}", getUsersByID).Methods("GET")
 	r.HandleFunc("/api/deleteUser/id/{id}", delete).Methods("DELETE")
+	r.HandleFunc("/api/editUser", edit).Methods("POST")
 
 	// pagina de testes
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(corsObj, headersOk, methodsOk)(r))) // se falhar dá erro !*/
