@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
+function SignUp() {
   const [isSignedUp, setSignedUp] = useState(false);
   const [isError, setIsError] = useState(false);
   const [email, setEmail] = useState("");
@@ -145,9 +145,8 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <Link href="/signin" variant="body2">Already have an account? Sign in</Link>
+              { isError && <Error>Something went wrong!</Error> }
             </Grid>
           </Grid>
         </form>
@@ -158,3 +157,5 @@ export default function SignUp() {
     </Container>
   );
 }
+
+export default SignUp;

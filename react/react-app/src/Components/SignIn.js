@@ -16,7 +16,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { useAuth } from "../context/auth";
 
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -59,7 +58,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInSide(props) {
+function SignInSide(props) {
   
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -171,3 +170,5 @@ export default function SignInSide(props) {
     </Grid>
   );
 }
+
+export default SignInSide;
