@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Redirect from "react-router-dom";
+//import Redirect from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -75,15 +75,19 @@ function SignInSide(props) {
   }
   
   function postLogin() {
-    axios.post("https://jsonplaceholder.typicode.com/users", { 
+    var user = {
       email: email,
       password: password,
-    }).then(result => {
-      console.log(result);
-      if (result.status === 201) {
+    }
+    console.log(user);
+
+    axios.post("http://localhost:8000/api/login", user)
+    .then(result => {  
+      if (result.status === 200 || result.status === 201) {
+        console.log(result);
         setAuthTokens(result.data);
         setLoggedIn(true);
-        props.history.push("/");
+        props.history.push('/');
       } else {
         setIsError(true);
       }
@@ -95,6 +99,7 @@ function SignInSide(props) {
   if (isLoggedIn) {
     props.history.push("/");
   }
+
   const classes = useStyles();
 
   return (

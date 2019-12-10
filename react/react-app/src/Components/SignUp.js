@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Redirect from "react-router-dom";
+//import Redirect from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -64,12 +64,13 @@ function SignUp(props) {
   }
 
   function postSignUp() {
-    axios.post("https://jsonplaceholder.typicode.com/users", { 
+    axios.post("http://localhost:8000/api/insertUser", { 
+      user_name: name,
       email: email,
       password: password,
     }).then(result => {
       console.log(result);
-      if (result.status === 200) {
+      if (result.status === 200 || result.status === 201) {
         setAuthTokens(result.data);
         setSignedUp(true);
         props.history.push("/signin");
