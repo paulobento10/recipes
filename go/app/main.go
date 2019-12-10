@@ -161,6 +161,31 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	w.Write(j)
 }
 
+func checkUser(user_name string, pass string) bool {
+	var u User
+	db := openConnDB()
+	err := db.Get(&u, "SELECT user_name, password FROM users WHERE user_name like "+"'"+user_name+"'")
+	if err != nil {
+		return false
+	}
+	if u.Password != pass {
+		return false
+	}
+	closeConnDB(db)
+	return true
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var user User
+	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	json.NewDecoder(r.Body).Decode(&user)
+	result := checkUser(user.User_name, user.Password)
+	j, _ := json.Marshal(result)
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}
+
 func test(w http.ResponseWriter, r *http.Request) {
 	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	j, _ := json.Marshal("test")
@@ -185,6 +210,7 @@ func main() {
 	r.HandleFunc("/api/searchUser/id/{id}", getUsersByID).Methods("GET")
 	r.HandleFunc("/api/deleteUser/id/{id}", delete).Methods("DELETE")
 	r.HandleFunc("/api/editUser", edit).Methods("POST")
+	r.HandleFunc("/api/login", login).Methods("POST")
 
 	// pagina de testes
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(corsObj, headersOk, methodsOk)(r))) // se falhar dá erro !*/
