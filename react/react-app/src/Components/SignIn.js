@@ -67,15 +67,23 @@ function SignInSide(props) {
   const { setAuthTokens } = useAuth();
   //const referer = props.location.state.referer || '/';
 
+  function hashPass(pass) {
+    var bcrypt = require('bcryptjs');
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(pass, salt);
+    setPassword(hash);
+  }
+  
   function postLogin() {
-    axios.post("https://www.somePlace.com/auth/login", {
-      email,
-      password
+    axios.post("https://jsonplaceholder.typicode.com/users", { 
+      email: email,
+      password: password,
     }).then(result => {
-      if (result.status === 200) {
+      console.log(result);
+      if (result.status === 201) {
         setAuthTokens(result.data);
         setLoggedIn(true);
-        console.log(result);
+        props.history.push("/");
       } else {
         setIsError(true);
       }
@@ -85,7 +93,7 @@ function SignInSide(props) {
   }
 
   if (isLoggedIn) {
-    return <Redirect to='/'/>;
+    props.history.push("/");
   }
   const classes = useStyles();
 
@@ -110,7 +118,6 @@ function SignInSide(props) {
               id="email"
               label="Email Address"
               name="email"
-              value={email}
               onChange={e => {
                 setEmail(e.target.value);
               }}
@@ -126,9 +133,8 @@ function SignInSide(props) {
               label="Password"
               type="password"
               id="password"
-              value={password}
               onChange={e => {
-                setPassword(e.target.value);
+                hashPass(e.target.value);
               }}
               autoComplete="current-password"
             />

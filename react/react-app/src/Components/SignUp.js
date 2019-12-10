@@ -20,7 +20,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-       PAWB Recipes{' '}
+        PAWB Recipes{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -47,7 +47,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function SignUp() {
+function SignUp(props) {
+
   const [isSignedUp, setSignedUp] = useState(false);
   const [isError, setIsError] = useState(false);
   const [name, setName] = useState("");
@@ -55,16 +56,23 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const { setAuthTokens } = useAuth();
 
+  function hashPass(pass) {
+    var bcrypt = require('bcryptjs');
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(pass, salt);
+    setPassword(hash);
+  }
+
   function postSignUp() {
-    axios.post("https://www.somePlace.com/auth/login", {
-      name,
-      email,
-      password
+    axios.post("https://jsonplaceholder.typicode.com/users", { 
+      email: email,
+      password: password,
     }).then(result => {
+      console.log(result);
       if (result.status === 200) {
         setAuthTokens(result.data);
         setSignedUp(true);
-        console.log(result);
+        props.history.push("/signin");
       } else {
         setIsError(true);
       }
@@ -74,7 +82,7 @@ function SignUp() {
   }
 
   if (isSignedUp) {
-    return <Redirect to='/signin'/>;
+    props.history.push("/signin");
   }
 
   const classes = useStyles();
@@ -100,7 +108,6 @@ function SignUp() {
                 fullWidth
                 id="name"
                 label="Name"
-                value={name}
                 onChange={e => {
                   setName(e.target.value);
                 }}
@@ -115,7 +122,6 @@ function SignUp() {
                 id="email"
                 label="Email Address"
                 name="email"
-                value={email}
                 onChange={e => {
                   setEmail(e.target.value);
                 }}
@@ -131,9 +137,8 @@ function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
-                value={password}
                 onChange={e => {
-                  setPassword(e.target.value);
+                  hashPass(e.target.value);
                 }}
                 autoComplete="current-password"
               />
