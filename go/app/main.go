@@ -69,6 +69,18 @@ func closeConnDB(db *sqlx.DB) {
 	db.Close()
 }
 
+func searchAllUsers() []byte {
+	row := []User{}
+	db := openConnDB()
+	err := db.Select(&row, "SELECT * FROM users")
+	if err != nil {
+		log.Fatal(err)
+	}
+	j, _ := json.Marshal(row)
+	closeConnDB(db)
+	return j
+}
+
 func searchUserBDbyID(id string) []byte {
 	row := []User{}
 	db := openConnDB()
@@ -126,6 +138,13 @@ func editUser(user User) bool {
 	}
 	closeConnDB(db)
 	return true
+}
+
+func getAllUsers(w http.ResponseWriter, r *http.Request) {
+	rows := searchAllUsers()
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(rows)
 }
 
 func insert(w http.ResponseWriter, r *http.Request) {
@@ -211,6 +230,7 @@ func main() {
 	r.HandleFunc("/api/deleteUser/id/{id}", delete).Methods("DELETE")
 	r.HandleFunc("/api/editUser", edit).Methods("POST")
 	r.HandleFunc("/api/login", login).Methods("POST")
+	r.HandleFunc("/api/allUsers", getAllUsers).Methods("GET")
 
 	// pagina de testes
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(corsObj, headersOk, methodsOk)(r))) // se falhar dá erro !*/
