@@ -3,10 +3,10 @@ import './App.css';
 import {BrowserRouter as Router, Switch,Route} from "react-router-dom";
 import { AuthContext } from "./context/auth";
 import PrivateRoute from './PrivateRoute';
-import Show from './Components/Show';
-import Insert from './Components/Insert';
-import SignIn from './Components/SignIn';
-import SignUp from './Components/SignUp';
+import Show from './Pages/Show';
+import Insert from './Pages/Insert';
+import SignIn from './Pages/SignIn';
+import SignUp from './Pages/SignUp';
 
 function App(props) {
   const [authTokens, setAuthTokens] = useState();
