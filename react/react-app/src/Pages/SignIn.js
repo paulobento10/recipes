@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function SignInSide(props) {
+function SignIn(props) {
   
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -172,4 +172,4 @@ function SignInSide(props) {
   );
 }
 
-export default SignInSide;
+export default SignIn;

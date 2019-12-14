@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import Content from '../Components/Show/ShowContent';
+import Search from '../Components/Show/ShowSearch';
 import Header from '../Components/Header';
 import Copyright from "../Components/Copyright";
 
@@ -163,7 +163,7 @@ function Show(props) {
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
-            <Content />
+            <Search />
           </main>
           <footer className={classes.footer}>
             <Copyright />

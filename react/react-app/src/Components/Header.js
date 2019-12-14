@@ -43,7 +43,7 @@ const styles = theme => ({
   },
 });
 
-function ShowHeader(props) {
+function Header(props) {
   const { classes, onDrawerToggle } = props;
 
   return (
@@ -74,9 +74,9 @@ function ShowHeader(props) {
   );
 }
 
-ShowHeader.propTypes = {
+Header.propTypes = {
   classes: PropTypes.object.isRequired,
   onDrawerToggle: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(ShowHeader);
+export default withStyles(styles)(Header);

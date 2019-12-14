@@ -71,7 +71,7 @@ const StyledMenuItem = withStyles(theme => ({
   },
 }))(MenuItem);
 
-function ShowContent(props) {
+function ShowSearch(props) {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -140,8 +140,8 @@ function ShowContent(props) {
   );
 }
 
-ShowContent.propTypes = {
+ShowSearch.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ShowContent);
+export default withStyles(styles)(ShowSearch);
