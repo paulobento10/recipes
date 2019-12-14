@@ -106,7 +106,7 @@ func getUsersByID(w http.ResponseWriter, r *http.Request) {
 func insertUser(user User) bool {
 	db := openConnDB()
 	tx := db.MustBegin()
-	tx.NamedExec("INSERT INTO users (user_id, user_name, email, password) VALUES (:user_id, :user_name, :email, :password)", &user)
+	tx.NamedExec("INSERT INTO users (user_name, email, password) VALUES (:user_name, :email, :password)", &user)
 	err := tx.Commit()
 	if err != nil {
 		return false

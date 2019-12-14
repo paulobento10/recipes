@@ -16,6 +16,32 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_user_id_fkey;
+ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_recipe_id_fkey;
+ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_ingredient_id_fkey;
+ALTER TABLE ONLY public.directions DROP CONSTRAINT directions_recipe_id_fkey;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_user_name_key;
+ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
+ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_pkey;
+ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_pkey;
+ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredients_pkey;
+ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredients_ingredient_name_key;
+ALTER TABLE ONLY public.directions DROP CONSTRAINT directions_pkey;
+ALTER TABLE public.users ALTER COLUMN user_id DROP DEFAULT;
+ALTER TABLE public.recipes ALTER COLUMN recipe_id DROP DEFAULT;
+ALTER TABLE public.recipeingredients ALTER COLUMN recipeingredient_id DROP DEFAULT;
+ALTER TABLE public.ingredients ALTER COLUMN ingredient_id DROP DEFAULT;
+ALTER TABLE public.directions ALTER COLUMN direction_id DROP DEFAULT;
+DROP SEQUENCE public.users_user_id_seq;
+DROP TABLE public.users;
+DROP SEQUENCE public.recipes_recipe_id_seq;
+DROP TABLE public.recipes;
+DROP SEQUENCE public.recipeingredients_recipeingredient_id_seq;
+DROP TABLE public.recipeingredients;
+DROP SEQUENCE public.ingredients_ingredient_id_seq;
+DROP TABLE public.ingredients;
+DROP SEQUENCE public.directions_direction_id_seq;
+DROP TABLE public.directions;
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -35,6 +61,28 @@ CREATE TABLE public.directions (
 ALTER TABLE public.directions OWNER TO docker;
 
 --
+-- Name: directions_direction_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
+--
+
+CREATE SEQUENCE public.directions_direction_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.directions_direction_id_seq OWNER TO docker;
+
+--
+-- Name: directions_direction_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
+--
+
+ALTER SEQUENCE public.directions_direction_id_seq OWNED BY public.directions.direction_id;
+
+
+--
 -- Name: ingredients; Type: TABLE; Schema: public; Owner: docker
 --
 
@@ -45,6 +93,28 @@ CREATE TABLE public.ingredients (
 
 
 ALTER TABLE public.ingredients OWNER TO docker;
+
+--
+-- Name: ingredients_ingredient_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
+--
+
+CREATE SEQUENCE public.ingredients_ingredient_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ingredients_ingredient_id_seq OWNER TO docker;
+
+--
+-- Name: ingredients_ingredient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
+--
+
+ALTER SEQUENCE public.ingredients_ingredient_id_seq OWNED BY public.ingredients.ingredient_id;
+
 
 --
 -- Name: recipeingredients; Type: TABLE; Schema: public; Owner: docker
@@ -58,6 +128,28 @@ CREATE TABLE public.recipeingredients (
 
 
 ALTER TABLE public.recipeingredients OWNER TO docker;
+
+--
+-- Name: recipeingredients_recipeingredient_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
+--
+
+CREATE SEQUENCE public.recipeingredients_recipeingredient_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.recipeingredients_recipeingredient_id_seq OWNER TO docker;
+
+--
+-- Name: recipeingredients_recipeingredient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
+--
+
+ALTER SEQUENCE public.recipeingredients_recipeingredient_id_seq OWNED BY public.recipeingredients.recipeingredient_id;
+
 
 --
 -- Name: recipes; Type: TABLE; Schema: public; Owner: docker
@@ -74,6 +166,28 @@ CREATE TABLE public.recipes (
 ALTER TABLE public.recipes OWNER TO docker;
 
 --
+-- Name: recipes_recipe_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
+--
+
+CREATE SEQUENCE public.recipes_recipe_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.recipes_recipe_id_seq OWNER TO docker;
+
+--
+-- Name: recipes_recipe_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
+--
+
+ALTER SEQUENCE public.recipes_recipe_id_seq OWNED BY public.recipes.recipe_id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: docker
 --
 
@@ -86,6 +200,63 @@ CREATE TABLE public.users (
 
 
 ALTER TABLE public.users OWNER TO docker;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: docker
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_id_seq OWNER TO docker;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: docker
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- Name: directions direction_id; Type: DEFAULT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.directions ALTER COLUMN direction_id SET DEFAULT nextval('public.directions_direction_id_seq'::regclass);
+
+
+--
+-- Name: ingredients ingredient_id; Type: DEFAULT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.ingredients ALTER COLUMN ingredient_id SET DEFAULT nextval('public.ingredients_ingredient_id_seq'::regclass);
+
+
+--
+-- Name: recipeingredients recipeingredient_id; Type: DEFAULT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.recipeingredients ALTER COLUMN recipeingredient_id SET DEFAULT nextval('public.recipeingredients_recipeingredient_id_seq'::regclass);
+
+
+--
+-- Name: recipes recipe_id; Type: DEFAULT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.recipes ALTER COLUMN recipe_id SET DEFAULT nextval('public.recipes_recipe_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
 
 --
 -- Data for Name: directions; Type: TABLE DATA; Schema: public; Owner: docker
@@ -125,6 +296,41 @@ COPY public.recipes (recipe_id, recipe_name, recipe_description, user_id) FROM s
 
 COPY public.users (user_id, user_name, email, password) FROM stdin;
 \.
+
+
+--
+-- Name: directions_direction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
+--
+
+SELECT pg_catalog.setval('public.directions_direction_id_seq', 1, false);
+
+
+--
+-- Name: ingredients_ingredient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
+--
+
+SELECT pg_catalog.setval('public.ingredients_ingredient_id_seq', 1, false);
+
+
+--
+-- Name: recipeingredients_recipeingredient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
+--
+
+SELECT pg_catalog.setval('public.recipeingredients_recipeingredient_id_seq', 1, false);
+
+
+--
+-- Name: recipes_recipe_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
+--
+
+SELECT pg_catalog.setval('public.recipes_recipe_id_seq', 1, false);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
 
 
 --
@@ -218,4 +424,3 @@ ALTER TABLE ONLY public.recipes
 --
 -- PostgreSQL database dump complete
 --
-
