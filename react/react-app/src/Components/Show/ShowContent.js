@@ -1,34 +1,42 @@
 import React from 'react';
-import { useState, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import { withStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import MenuIcon from '@material-ui/icons/Menu';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import axios from 'axios';
+//import axios from 'axios';
 
+const useStyles = makeStyles({
+    card: {
+      minWidth: 275,
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+});
 
 function ShowContent(props) {
-    const [theArray, setTheArray] = useState([]);
-    const addEntryClick = () => {
-        setTheArray([...theArray, "Entry ${theArray.length}"]);
-    };
-    
-    return (
-        <Button onClick={addEntryClick}>{theArray.length}</Button>
-      );
+  const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  return (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+        {props.recipes.map(item => {
+          return <li key={item.id}>{item.id}{bull}{item.label}</li>;
+        })}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
 }
 
 export default ShowContent;

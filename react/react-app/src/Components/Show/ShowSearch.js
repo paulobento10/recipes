@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, /*useCallback,*/ useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,15 +8,12 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Content from './ShowContent'
 
 const styles = theme => ({
   paper: {
@@ -75,6 +73,28 @@ function ShowSearch(props) {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {                 //aqui iremos preencher o array das receitas (default) logo após o render (get de allrecipes)
+    setRecipes([
+      ...recipes,
+      {
+        id: 1,
+        label: "Joao"
+      }
+    ]);
+  }, []);
+
+  const addEntryClick = () => {     //aqui iremos atualizar o array das receitas para as receitas pesquisadas (resposta ao get da pesquisa)
+    setRecipes([
+      ...recipes,
+      {
+        id: (recipes[(recipes.length-1)].id)+1,
+        label: "Joao"
+      }
+    ]);
+  };
+
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -82,6 +102,7 @@ function ShowSearch(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Paper className={classes.paper}>
       <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
@@ -129,13 +150,14 @@ function ShowSearch(props) {
               />
             </Grid>
             <Grid item >
-              <Button variant="outlined" /*onClick(função de get de receitas)*/>
+              <Button variant="outlined" onClick={addEntryClick} /*onClick(função de get de receitas)*/>
                 Search
               </Button>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
+      <Content recipes={recipes}/>
     </Paper>
   );
 }
