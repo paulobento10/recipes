@@ -16,7 +16,7 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_user_id_fkey;
+/*ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_user_id_fkey;
 ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_recipe_id_fkey;
 ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_ingredient_id_fkey;
 ALTER TABLE ONLY public.directions DROP CONSTRAINT directions_recipe_id_fkey;
@@ -41,7 +41,7 @@ DROP TABLE public.recipeingredients;
 DROP SEQUENCE public.ingredients_ingredient_id_seq;
 DROP TABLE public.ingredients;
 DROP SEQUENCE public.directions_direction_id_seq;
-DROP TABLE public.directions;
+DROP TABLE public.directions;*/
 SET default_tablespace = '';
 
 SET default_with_oids = false;
