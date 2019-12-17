@@ -95,16 +95,6 @@ function ShowSearch(props) {
     ]);
   };
 
-  const addEntryClick2 = () => {    //exemplo teste. depois irá haver uma função para cada ListItem que irá fazer um get para o respetivo tipo de comida
-    setRecipes([
-      ...recipes,
-      {
-        id: recipes.length+1,
-        label: "ola"
-      }
-    ]);
-  };
-
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -132,19 +122,19 @@ function ShowSearch(props) {
                 onClose={handleClose}>
               <Typography color="textSecondary" align="center">Meal Type ></Typography>
               <StyledMenuItem>
-                <ListItemText primary="Appetizers & Snacks"  onClick={addEntryClick2}/>
+                <ListItemText primary="Appetizers & Snacks"  /*onClick={função get para tipo de comida}*//>    
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Breakfast & Brunch" onClick={addEntryClick2}/>
+                <ListItemText primary="Breakfast & Brunch" /*onClick={função get para tipo de comida}*//>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Desserts" onClick={addEntryClick2}/>
+                <ListItemText primary="Desserts" /*onClick={função get para tipo de comida}*//>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Dinner" onClick={addEntryClick2}/>
+                <ListItemText primary="Dinner" /*onClick={função get para tipo de comida}*//>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Drinks" onClick={addEntryClick2}/>
+                <ListItemText primary="Drinks" /*onClick={função get para tipo de comida}*//>
               </StyledMenuItem>
             </StyledMenu>
           </Grid>
@@ -171,6 +161,7 @@ function ShowSearch(props) {
         </Toolbar>
       </AppBar>
       <Content recipes={recipes}/>
+      {/*Paginação*/}
     </Paper>
   );
 }

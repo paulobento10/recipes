@@ -7,6 +7,7 @@ import Show from './Pages/Show';
 import Insert from './Pages/Insert';
 import SignIn from './Pages/SignIn';
 import SignUp from './Pages/SignUp';
+import Recipe from './Pages/Recipe';
 
 function App(props) {
   const [authTokens, setAuthTokens] = useState();
@@ -21,10 +22,11 @@ function App(props) {
       <Router>
           <div className="App">
             <Switch>
-              <Route exact path="/" component={Show}/>
+              <Route exact path="/show" component={Show}/>
               <Route exact path="/signin" component={SignIn}/>
               <Route exact path="/signup" component={SignUp}/>
               <PrivateRoute exact path="/insert" component={Insert}/>
+              <Route exact path="/show/recipe/:id" component={Recipe}/>
             </Switch>
           </div>
           </Router>

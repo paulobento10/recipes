@@ -77,7 +77,7 @@ function SignIn(props) {
         console.log(result);
         setAuthTokens(result.data);
         setLoggedIn(true);
-        props.history.push('/');
+        props.history.push('/show');
       } else {
         setIsError(true);
       }
