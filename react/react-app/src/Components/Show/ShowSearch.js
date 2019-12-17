@@ -71,8 +71,8 @@ const StyledMenuItem = withStyles(theme => ({
 
 function ShowSearch(props) {
   const { classes } = props;
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [search, setSearch] = useState("");
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {                 //aqui iremos preencher o array das receitas (default) logo após o render (get de allrecipes)
@@ -90,7 +90,17 @@ function ShowSearch(props) {
       ...recipes,
       {
         id: (recipes[(recipes.length-1)].id)+1,
-        label: "Joao"
+        label: search
+      }
+    ]);
+  };
+
+  const addEntryClick2 = () => {    //exemplo teste. depois irá haver uma função para cada ListItem que irá fazer um get para o respetivo tipo de comida
+    setRecipes([
+      ...recipes,
+      {
+        id: recipes.length+1,
+        label: "ola"
       }
     ]);
   };
@@ -122,19 +132,19 @@ function ShowSearch(props) {
                 onClose={handleClose}>
               <Typography color="textSecondary" align="center">Meal Type ></Typography>
               <StyledMenuItem>
-                <ListItemText primary="Appetizers & Snacks"/>
+                <ListItemText primary="Appetizers & Snacks"  onClick={addEntryClick2}/>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Breakfast & Brunch" />
+                <ListItemText primary="Breakfast & Brunch" onClick={addEntryClick2}/>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Desserts" />
+                <ListItemText primary="Desserts" onClick={addEntryClick2}/>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Dinner" />
+                <ListItemText primary="Dinner" onClick={addEntryClick2}/>
               </StyledMenuItem>
               <StyledMenuItem>
-                <ListItemText primary="Drinks" />
+                <ListItemText primary="Drinks" onClick={addEntryClick2}/>
               </StyledMenuItem>
             </StyledMenu>
           </Grid>
@@ -146,6 +156,9 @@ function ShowSearch(props) {
                 InputProps={{
                   disableUnderline: true,
                   className: classes.searchInput,
+                }}
+                onChange={e => {
+                  setSearch(e.target.value);
                 }}
               />
             </Grid>
