@@ -129,7 +129,7 @@ function SignUp(props) {
                 type="password"
                 id="password"
                 onChange={e => {
-                  hashPass(e.target.value);
+                  setPassword(e.target.value);      //hashPass(e.target.value);
                 }}
                 autoComplete="current-password"
               />
