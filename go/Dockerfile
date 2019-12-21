@@ -18,7 +18,8 @@ RUN go get github.com/gorilla/mux \
     && go get github.com/lib/pq \
     && go get github.com/json-iterator/go \
     && go get github.com/jmoiron/sqlx \
-    && go get github.com/pilu/fresh
+    && go get github.com/pilu/fresh \
+    && go get golang.org/x/crypto/bcrypt
 
 #abre porta 8000 para a comunicação
 #cria o main.go para correr no CMD

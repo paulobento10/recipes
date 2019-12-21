@@ -28,8 +28,8 @@ services:
       - 'recipes'
     volumes:
       - './go/app:/go/src/github.com/app/restapi'
-    #environment:
-    #  - DEBUG = true
+    environment:
+      - DEBUG = true
     links:
       - postgres
   react:
