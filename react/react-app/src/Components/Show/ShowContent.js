@@ -1,69 +1,61 @@
-//Não está a funcionar!!!
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import { useState, /*useCallback,*/ useEffect } from 'react';
+import "antd/dist/antd.css";
 import { Card, Pagination } from "antd";
+import { Paper } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
-export class ShowContent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      minValue: 0,
-      maxValue: 9
-    };
-  }
-  handleChange = value => {
-    if (value <= 1) {
-      this.setState({
-        minValue: 0,
-        maxValue: 9
-      });
-    } else {
-      this.setState({
-        minValue: this.state.maxValue,
-        maxValue: value * 9
-      });
-    }
+const useStyles = makeStyles(theme => ({
+  paper: {
+    padding: theme.spacing(3, 2),
+    verticalAlign: 'middle',
+    margin: 'auto',
+  },
+  grid: {
+    flexGrow: 1,
+    padding: theme.spacing(3, 2),
+    verticalAlign: 'middle',
+    margin: 'auto',
+  },
+}));
+
+function ShowContent(props) {
+  const classes = useStyles();
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(5);
+  const [spacing, setSpacing] = React.useState(2);
+
+  const handleChange = value => {
+    setMinValue(((value-1)*5));
+    setMaxValue(value * 5);
   };
-  render() {
-    let data = [
-      { title: "Card title1", value: "Card content1" },
-      { title: "Card title2", value: "Card content2" },
-      { title: "Card title3", value: "Card content3" },
-      { title: "Card title4", value: "Card content4" },
-      { title: "Card title5", value: "Card content5" },
-      { title: "Card title6", value: "Card content6" },
-      { title: "Card title7", value: "Card content7" },
-      { title: "Card title8", value: "Card content8" },
-      { title: "Card title9", value: "Card content9" },
-      { title: "Card title10", value: "Card content10" },
-      { title: "Card title11", value: "Card content11" },
-      { title: "Card title12", value: "Card content12" },
-      { title: "Card title13", value: "Card content13" },
-      { title: "Card title14", value: "Card content14" },
-      { title: "Card title15", value: "Card content15" }
-    ];
-    return (
-      <div>
-        {data &&
-          data.length > 0 &&
-          data.slice(this.state.minValue, this.state.maxValue).map(val => (
-            <Card
-              title={val.title}
-              extra={<a href="#">More</a>}
-              style={{ width: 300 }}
-            >
-              <p>{val.value}</p>
-            </Card>
-          ))}
-        <Pagination
-          defaultCurrent={1}
-          defaultPageSize={9}
-          onChange={this.handleChange}
-          total={15}
-        />
-      </div>
-    );
-  }
+
+  return (
+    <Grid container className={classes.grid} spacing={2}>
+    <Grid item xs={12}>
+      <Grid container justify="center" spacing={spacing}>
+      {props.recipes &&
+        props.recipes.length > 0 &&
+        props.recipes.slice(minValue, maxValue).map(val => (
+          <Card 
+            title={val.label}
+            extra={<a href="#">More</a>}
+            style={{ width: 300 }}
+          >
+            <p>{val.id}</p>
+          </Card> 
+        ))}
+      </Grid>
+    </Grid>
+    <Pagination
+        defaultCurrent={1}
+        defaultPageSize={5}
+        onChange={handleChange}
+        total={props.recipes.length}
+      />
+    </Grid>
+  );
 }
 
-ReactDOM.render(<ShowContent />);
+export default ShowContent;
