@@ -88,7 +88,8 @@ ALTER SEQUENCE public.directions_direction_id_seq OWNED BY public.directions.dir
 
 CREATE TABLE public.ingredients (
     ingredient_id integer NOT NULL,
-    ingredient_name character varying(50) NOT NULL
+    ingredient_name character varying(50) NOT NULL,
+    kcal text
 );
 
 
@@ -159,7 +160,11 @@ CREATE TABLE public.recipes (
     recipe_id integer NOT NULL,
     recipe_name character varying(50) NOT NULL,
     recipe_description character varying(500) NOT NULL,
-    user_id integer NOT NULL
+    user_id integer NOT NULL,
+    duration text,
+    picture text,
+    category text,
+    kcal text
 );
 
 
@@ -270,7 +275,7 @@ COPY public.directions (direction_id, direction_details, direction_order, recipe
 -- Data for Name: ingredients; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
-COPY public.ingredients (ingredient_id, ingredient_name) FROM stdin;
+COPY public.ingredients (ingredient_id, ingredient_name, kcal) FROM stdin;
 \.
 
 
@@ -286,7 +291,7 @@ COPY public.recipeingredients (recipeingredient_id, ingredient_id, recipe_id) FR
 -- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
-COPY public.recipes (recipe_id, recipe_name, recipe_description, user_id) FROM stdin;
+COPY public.recipes (recipe_id, recipe_name, recipe_description, user_id, duration, picture, category, kcal) FROM stdin;
 \.
 
 
@@ -424,3 +429,4 @@ ALTER TABLE ONLY public.recipes
 --
 -- PostgreSQL database dump complete
 --
+
