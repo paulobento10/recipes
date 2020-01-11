@@ -73,7 +73,7 @@ function SignIn(props) {
 
     axios.post("http://localhost:8000/api/login", user)
     .then(result => {  
-      if (result.status === 200 || result.status === 201) {
+      if (result.data>=0) {
         console.log(result);
         setAuthTokens(result.data);
         setLoggedIn(true);

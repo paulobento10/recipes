@@ -25,7 +25,7 @@ function App(props) {
               <Route exact path="/show" component={Show}/>
               <Route exact path="/signin" component={SignIn}/>
               <Route exact path="/signup" component={SignUp}/>
-              <PrivateRoute exact path="/insert" component={Insert}/>
+              <Route exact path="/insert" component={Insert}/> {/*<PrivateRoute</div> exact path="/insert" component={Insert}/>*/}
               <Route exact path="/show/recipe/:id" component={Recipe}/>
             </Switch>
           </div>

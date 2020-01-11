@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Content from './ShowContent'
+import axios from 'axios';
 
 const styles = theme => ({
   paper: {
@@ -70,100 +71,180 @@ const StyledMenuItem = withStyles(theme => ({
 }))(MenuItem);
 
 function ShowSearch(props) {
-  const { classes } = props;
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [search, setSearch] = useState("");
-  const [recipes, setRecipes] = useState([]);
 
-  useEffect(() => {                 //aqui iremos preencher o array das receitas (default) logo após o render (get de allrecipes)
-    setRecipes([
-      ...recipes,
-      {
-        id: 1,
-        label: "Joao"
-      }
-    ]);
-  }, []);
+    const { classes } = props;
+    const [isError, setIsError] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [search, setSearch] = useState("");
+    const [recipes, setRecipes] = useState([]);
+    const [ingredient, setIngredient] = useState("");
+    const [dataIngredients, setDataIngredients] = useState([]);
+    const [searchByMeal, setSearchByMeal] = useState(false);
+    const [meal, setMeal] = useState("");
+    const [dataType, setDataType] = useState([{
+        value: 'Breakfast & Brunch',
+      }, {
+        value: 'Lunch & Dinner',
+      }, {
+        value: 'Desert',
+      }, {
+        value: 'Appetizers & Snacks',
+      },{
+        value: 'Drinks',
+      },]);
+      
 
-  const addEntryClick = () => {     //aqui iremos atualizar o array das receitas para as receitas pesquisadas (resposta ao get da pesquisa)
-    setRecipes([
-      ...recipes,
-      {
-        id: (recipes[(recipes.length-1)].id)+1,
-        label: search
-      }
-    ]);
-  };
+    useEffect(() => {
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
-  };
+        getAll();
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+        //axios.get("http://192.168.1.68:8000/api/searchIngredientAll")
+        axios.get("http://localhost:8000/api/searchIngredientAll")
+        .then(resulti => {
+            if (resulti.status==200) { 
+              console.log(resulti.data)
+                setDataIngredients([]);
+                for (let ingObject of resulti.data) {
+                    var ing= ingObject.ingredient_name;
+                    setDataIngredients(dataIngredients =>[...dataIngredients, {value: ing}])
+                }
+            } else {
+                setIsError(true);
+            }
+        }).catch(e => {
+            setIsError(true);
+        });
+      }, []);
 
-  return (
-    <Paper className={classes.paper}>
-      <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
-        <Toolbar>
-          <Grid item xs={1}>
-            <MenuIcon color="inherit" 
-            aria-controls="customized-menu"
-            aria-haspopup="true"
-            variant="contained" 
-            onClick={handleClick} 
-            />
-            <StyledMenu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}>
-              <Typography color="textSecondary" align="center">Meal Type ></Typography>
-              <StyledMenuItem>
-                <ListItemText primary="Appetizers & Snacks"  /*onClick={função get para tipo de comida}*//>    
-              </StyledMenuItem>
-              <StyledMenuItem>
-                <ListItemText primary="Breakfast & Brunch" /*onClick={função get para tipo de comida}*//>
-              </StyledMenuItem>
-              <StyledMenuItem>
-                <ListItemText primary="Desserts" /*onClick={função get para tipo de comida}*//>
-              </StyledMenuItem>
-              <StyledMenuItem>
-                <ListItemText primary="Dinner" /*onClick={função get para tipo de comida}*//>
-              </StyledMenuItem>
-              <StyledMenuItem>
-                <ListItemText primary="Drinks" /*onClick={função get para tipo de comida}*//>
-              </StyledMenuItem>
-            </StyledMenu>
-          </Grid>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item xs={10}>
-              <TextField
-                fullWidth
-                placeholder="Search by name or ingredient"  //a pesquisa por ingredientes pode ser como este site usa https://www.allrecipes.com/
-                InputProps={{
-                  disableUnderline: true,
-                  className: classes.searchInput,
-                }}
-                onChange={e => {
-                  setSearch(e.target.value);
-                }}
+      const searchGet = () => {
+        console.log(search)
+        //axios.get("http://192.168.1.68:8000/api/searchRecipeName/name/"+search.text)
+        axios.get("http://localhost:8000/api/searchRecipeName/name/"+search)
+        .then(result => {
+            console.log(result)
+            if (result.status==200) { 
+                setRecipes(result.data);
+            } else {
+                setIsError(true);
+            }
+        }).catch(e => {
+            setIsError(true);
+        });
+    };
+
+    const getAll = () => {
+        //axios.get("http://192.168.1.68:8000/api/searchRecipeAll")
+        axios.get("http://localhost:8000/api/searchRecipeAll")
+        .then(result => {
+            if (result.status==200) { 
+                setRecipes(result.data);
+                setSearchByMeal(false)
+            } else {
+                setIsError(true);
+            }
+        }).catch(e => {
+            setIsError(true);
+        });
+    }
+
+    const mealGet = (mealValue) => {
+      console.log(mealValue)
+        //axios.get("http://192.168.1.68:8000/api/searchRecipeCategory/category/"+meal.value)
+        axios.get("http://localhost:8000/api/searchRecipeCategory/category/"+mealValue)
+        .then(result => {
+            console.log(result.data);
+            if (result.status==200) { 
+                setRecipes(result.data);
+                setSearchByMeal(false)
+            } else {
+                setIsError(true);
+            }
+        }).catch(e => {
+            setIsError(true);
+        });
+    };
+
+    const ingredientGet = (ingredientValue) => {
+      console.log(ingredientValue)
+        //axios.get("http://192.168.1.68:8000/api/searchIngredientName/name/"+ingredient.value)
+        axios.get("http://localhost:8000/api/searchRecipeNameTotal/name/"+ingredientValue) 
+        .then(result => {
+            console.log(result.data);
+            if (result.status==200) { 
+                setRecipes(result.data);
+                setSearchByMeal(false)
+            } else {
+                setIsError(true);
+            }
+        }).catch(e => {
+            setIsError(true);
+        });
+    };
+
+    const handleClick = event => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    return (
+      <Paper className={classes.paper}>
+        <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
+          <Toolbar>
+            <Grid item xs={1}>
+              <MenuIcon color="inherit" 
+              aria-controls="customized-menu"
+              aria-haspopup="true"
+              variant="contained" 
+              onClick={handleClick} 
               />
+              <StyledMenu
+                  id="customized-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}>
+                <Typography color="textSecondary" align="center">Meal Type ></Typography>
+                {dataType.map((val, key)=>(
+                  <StyledMenuItem key={key}>
+                    <ListItemText primary={val.value} onClick={mealGet}/>    
+                  </StyledMenuItem>
+                ))}
+                <Typography color="textSecondary" align="center">Ingredients ></Typography>
+                {dataIngredients.map((val, key)=>(
+                  <StyledMenuItem key={key}>
+                    <ListItemText primary={val.value} onClick={ingredientGet}/>    
+                  </StyledMenuItem>
+                ))}
+              </StyledMenu>
             </Grid>
-            <Grid item >
-              <Button variant="outlined" onClick={addEntryClick} /*onClick(função de get de receitas)*/>
-                Search
-              </Button>
+            <Grid container spacing={1} alignItems="center">
+              <Grid item xs={10}>
+                <TextField
+                  fullWidth
+                  placeholder="Search by name"  //a pesquisa por ingredientes pode ser como este site usa https://www.allrecipes.com/
+                  InputProps={{
+                    disableUnderline: true,
+                    className: classes.searchInput,
+                  }}
+                  onChange={e => {
+                    setSearch(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item >
+                <Button variant="outlined" onClick={searchGet} /*onClick(função de get de receitas)*/>
+                  Search
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-      <Content recipes={recipes}/>
-      {/*Paginação*/}
-    </Paper>
-  );
+          </Toolbar>
+        </AppBar>
+        <Content recipes={recipes}/>
+      </Paper>
+    );
 }
 
 ShowSearch.propTypes = {
