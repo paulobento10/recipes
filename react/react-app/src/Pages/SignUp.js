@@ -60,7 +60,7 @@ function SignUp(props) {
       password: password,
     }).then(result => {
       console.log(result);
-      if (result.status === 200 || result.status === 201) {
+      if (result.data==true) {
         setAuthTokens(result.data);
         setSignedUp(true);
         props.history.push("/signin");
