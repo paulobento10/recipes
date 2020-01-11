@@ -168,7 +168,7 @@ func deleteUser(id string) bool {
 func checkUser(email string, pass string) int {
 	var u User
 	db := openConnDB()
-	err := db.Get(&u, "SELECT * FROM users WHERE email like "+"'"+email+"'")
+	err := db.Get(&u, "SELECT * FROM users WHERE email = "+"'"+email+"'")
 	if err != nil {
 		return -1
 	}
@@ -371,8 +371,8 @@ func getRecipeByName(recipe_name string) []byte {
 func getRecipeByExactName(recipe_name string) []byte {
 	row := []Recipes{}
 	db := openConnDB()
-	recipe_name = "'"+recipe_name+"'"
-	querry := "SELECT recipe_id FROM recipes WHERE recipe_name = "+recipe_name +" ORDER BY recipe_id DESC"
+	recipe_name = "'" + recipe_name + "'"
+	querry := "SELECT recipe_id FROM recipes WHERE recipe_name = " + recipe_name + " ORDER BY recipe_id DESC"
 	err := db.Select(&row, querry)
 	if err != nil {
 		log.Fatal(err)
