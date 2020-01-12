@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,11 +13,14 @@ import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { useAuth } from "../context/auth";
 import Copyright from "../Components/Copyright";
+import { Redirect } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 //import Redirect from "react-router-dom";
 //import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import Checkbox from '@material-ui/core/Checkbox';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -35,136 +38,157 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+});
 
-function SignUp(props) {
+class SignUp extends Component {
 
-  const [isSignedUp, setSignedUp] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { setAuthTokens } = useAuth();
-
-  function hashPass(pass) {
-    var bcrypt = require('bcryptjs');
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(pass, salt);
-    setPassword(hash);
+  constructor(props){
+    super(props);
+    this.state = {
+      registered: false,
+      name: "",
+      password: "",
+      email:"",
+    };
+    this.handleRegister=this.handleRegister.bind(this);
   }
 
-  function postSignUp() {
-    axios.post("http://localhost:8000/api/insertUser", { 
-      user_name: name,
-      email: email,
-      password: password,
-    }).then(result => {
-      console.log(result);
-      if (result.data==true) {
-        setAuthTokens(result.data);
-        setSignedUp(true);
-        props.history.push("/signin");
-      } else {
-        setIsError(true);
+  handleRegister(e)
+  {
+    e.preventDefault();
+    if(this.state.email === ""){
+      alert("Email is required");
+    }
+    else if(this.state.password === "") {
+      alert("Password is required");
+    }
+    else if(this.state.name === "") {
+      alert("Username is required");
+    }
+    else{
+      var user = {
+        user_name: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
       }
-    }).catch(e => {
-      setIsError(true);
-    });
+      console.log(user);
+      axios.post('http://localhost:8000/api/insertUser', user)
+      .then(response => {
+        console.log(response.data);
+        if (response.data === false)
+        {
+          alert("Something went wrong!");
+        }
+        else if (response.data !== false){
+          this.setState({registered: true});
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
+    }
   }
 
-  if (isSignedUp) {
-    props.history.push("/signin");
+  render() {
+    const { classes } = this.props;
+    if (this.state.registered === true) {
+      console.log('registou')
+      return <Redirect to='/signin' />
+    }
+
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="name"
+                  name="name"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  onChange={e => {
+                    this.setState({
+                      name: e.target.value
+                    });  
+                  }}
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  onChange={e => {
+                    this.setState({
+                      email: e.target.value
+                    });  
+                  }}
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  onChange={e => {
+                    this.setState({
+                      password: e.target.value
+                    });  
+                  }}
+                  autoComplete="current-password"
+                />
+              </Grid>
+              {/*<Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                />
+              </Grid>
+              */}
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={this.handleRegister}
+            >
+              Sign Up
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/signin" variant="body2">Already have an account? Sign In</Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+        <Box mt={5}>
+          <Copyright />
+        </Box>
+      </Container>
+    );
   }
-
-  const classes = useStyles();
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="name"
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                onChange={e => {
-                  setName(e.target.value);
-                }}
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                onChange={e => {
-                  setEmail(e.target.value);
-                }}
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={e => {
-                  setPassword(e.target.value);      //hashPass(e.target.value);
-                }}
-                autoComplete="current-password"
-              />
-            </Grid>
-            {/*<Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-            */}
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={postSignUp}
-          >
-            Sign Up
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/signin" variant="body2">Already have an account? Sign in</Link>
-              { isError && <Error>Something went wrong!</Error> }
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
-  );
 }
 
-export default SignUp;
+export default withStyles(useStyles)(SignUp);
