@@ -38,6 +38,7 @@ type Ingredients struct {
 	Ingredient_id   int    `json:"ingredient_id"`
 	Ingredient_name string `json:"ingredient_name"`
 	Kcal            string `json:"kcal"`
+	User_id         int    `json:"user_id"`
 }
 
 type Directions struct {
@@ -168,7 +169,7 @@ func deleteUser(id string) bool {
 func checkUser(email string, pass string) int {
 	var u User
 	db := openConnDB()
-	err := db.Get(&u, "SELECT * FROM users WHERE email = "+"'"+email+"'")
+	err := db.Get(&u, "SELECT * FROM users WHERE email like "+"'"+email+"'")
 	if err != nil {
 		return -1
 	}
@@ -494,7 +495,7 @@ func editIngredient(i Ingredients) bool {
 
 	db := openConnDB()
 	tx := db.MustBegin()
-	tx.NamedExec("UPDATE ingredients SET ingredient_name=:ingredient_name, kcal=:kcal WHERE ingredient_id=:ingredient_id", &i)
+	tx.NamedExec("UPDATE ingredients SET ingredient_name=:ingredient_name, kcal=:kcal, user_id=:user_id WHERE ingredient_id=:ingredient_id", &i)
 	//err := tx.Commit()
 
 	//As an ingredient gets its kcal updated, so does the recipes it belongs to should

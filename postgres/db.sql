@@ -19,6 +19,7 @@ SET row_security = off;
 /*ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_user_id_fkey;
 ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_recipe_id_fkey;
 ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_ingredient_id_fkey;
+ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredient_user_id_fkey;
 ALTER TABLE ONLY public.directions DROP CONSTRAINT directions_recipe_id_fkey;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_user_name_key;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
@@ -89,7 +90,8 @@ ALTER SEQUENCE public.directions_direction_id_seq OWNED BY public.directions.dir
 CREATE TABLE public.ingredients (
     ingredient_id integer NOT NULL,
     ingredient_name character varying(50) NOT NULL,
-    kcal text
+    kcal text,
+    user_id integer
 );
 
 
@@ -275,7 +277,8 @@ COPY public.directions (direction_id, direction_details, direction_order, recipe
 -- Data for Name: ingredients; Type: TABLE DATA; Schema: public; Owner: docker
 --
 
-COPY public.ingredients (ingredient_id, ingredient_name, kcal) FROM stdin;
+COPY public.ingredients (ingredient_id, ingredient_name, kcal, user_id) FROM stdin;
+1	banana	100	1
 \.
 
 
@@ -300,6 +303,7 @@ COPY public.recipes (recipe_id, recipe_name, recipe_description, user_id, durati
 --
 
 COPY public.users (user_id, user_name, email, password) FROM stdin;
+1	paulo	paulo	123
 \.
 
 
@@ -314,7 +318,7 @@ SELECT pg_catalog.setval('public.directions_direction_id_seq', 1, false);
 -- Name: ingredients_ingredient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
 --
 
-SELECT pg_catalog.setval('public.ingredients_ingredient_id_seq', 1, false);
+SELECT pg_catalog.setval('public.ingredients_ingredient_id_seq', 3, true);
 
 
 --
@@ -335,7 +339,7 @@ SELECT pg_catalog.setval('public.recipes_recipe_id_seq', 1, false);
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: docker
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_user_id_seq', 1, true);
 
 
 --
@@ -403,6 +407,14 @@ ALTER TABLE ONLY public.directions
 
 
 --
+-- Name: ingredients ingredient_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.ingredients
+    ADD CONSTRAINT ingredient_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
 -- Name: recipeingredients recipeingredients_ingredient_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: docker
 --
 
@@ -429,4 +441,3 @@ ALTER TABLE ONLY public.recipes
 --
 -- PostgreSQL database dump complete
 --
-
