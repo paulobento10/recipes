@@ -29,7 +29,7 @@ function App(props) {
               <Route exact path="/show/recipe/:id" component={Recipe}/>
             </Switch>
           </div>
-          </Router>
+        </Router>
     </AuthContext.Provider>
   );
 }
