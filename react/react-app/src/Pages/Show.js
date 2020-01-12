@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Search from '../Components/Show/ShowSearch';
@@ -116,8 +115,6 @@ theme = {
   },
 };
 
-const drawerWidth = 256;
-
 const styles = {
   root: {
     display: 'flex',
@@ -125,7 +122,7 @@ const styles = {
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
+      width: 256,
       flexShrink: 0,
     },
   },
@@ -145,34 +142,28 @@ const styles = {
   },
 };
 
-function Show(props) {
-  const { classes } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+class Show extends Component {
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  render() {
+    const { classes } = this.props;
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div className={classes.root}>
-        <CssBaseline />
-        <div className={classes.app}>
-          <Header onDrawerToggle={handleDrawerToggle} />
-          <main className={classes.main}>
-            <Search />
-          </main>
-          <footer className={classes.footer}>
-            <Copyright />
-          </footer>
+    return (
+      <ThemeProvider theme={theme}>
+        <div className={classes.root}>
+          <CssBaseline />
+          <div className={classes.app}>
+            <Header />
+            <main className={classes.main}>
+              <Search />
+            </main>
+            <footer className={classes.footer}>
+              <Copyright />
+            </footer>
+          </div>
         </div>
-      </div>
-    </ThemeProvider>
-  );
+      </ThemeProvider>
+    );
+  }
 }
-
-Show.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(Show);
