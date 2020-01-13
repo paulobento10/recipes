@@ -80,7 +80,6 @@ class ShowSearch extends Component {
       recipes: [],
       ingredient: "",
       dataIngredients: [],
-      searchByMeal: false,
       meal: "",
       dataType: [{
         value: 'Breakfast & Brunch',
@@ -148,7 +147,6 @@ class ShowSearch extends Component {
     .then(result => {
         if (result.status==200) { 
           this.setState({recipes: result.data})
-          this.setState({searchByMeal: false})
         } else {
           this.setState({isError: true})
         }
@@ -166,7 +164,7 @@ class ShowSearch extends Component {
         console.log(result.data);
         if (result.status==200) { 
           this.setState({recipes: result.data})
-          this.setState({searchByMeal: false})
+          this.handleClose()
         } else {
           this.setState({isError: true})
         }
@@ -184,7 +182,7 @@ class ShowSearch extends Component {
         console.log(result.data);
         if (result.status==200) { 
           this.setState({recipes: result.data})
-          this.setState({searchByMeal: false})
+          this.handleClose()
         } else {
           this.setState({isError: true})
         }

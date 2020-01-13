@@ -1,8 +1,11 @@
 import React, { Component } from "react";
+import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import { useState, /*useCallback,*/ useEffect } from 'react';
 import "antd/dist/antd.css";
 import { Pagination } from "antd";
+import Link from '@material-ui/core/Link';
 import { Paper, Container } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -36,6 +39,7 @@ class ShowContent extends Component {
     this.state = {
       minValue: 0,
       maxValue: 9,
+      redirectId: -1,
       spacing: 2,
     };
     this.handleChange=this.handleChange.bind(this);
@@ -45,7 +49,7 @@ class ShowContent extends Component {
     this.setState({minValue: (value-1)*9})
     this.setState({maxValue: value * 9})
   }
-
+ 
   render() {
     const { classes } = this.props;
 
@@ -56,17 +60,16 @@ class ShowContent extends Component {
         {this.props.recipes &&
           this.props.recipes.length > 0 &&
           this.props.recipes.slice(this.state.minValue, this.state.maxValue).map((val, key) => (
-            <Card 
-              key={key}
-              hoverable
-              style={{ width: 300, padding: 10}}
-              cover={<img alt="example" src={val.picture} height={200} width={250} />}
-            >
-              <Meta title={val.recipe_name} description={val.category} />
-            </Card>
-            
+            <a key={key} href={"/show/recipe/"+val.recipe_id}>
+              <Card 
+                hoverable
+                style={{ width: 300, padding: 10}}
+                cover={<img alt="example" src={val.picture} height={200} width={250}/>}
+              >
+                <Meta title={val.recipe_name} description={val.category}/>
+              </Card>
+            </a>
           ))}
-          
         </Grid>
       </Grid>
       <Container className={classes.container}>
