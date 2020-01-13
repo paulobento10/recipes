@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
@@ -33,40 +34,41 @@ const styles = theme => ({
   },
 });
 
-function Header(props) {
-  const { classes/*, onDrawerToggle*/ } = props;
+class Header extends Component {
 
-  return (
-    <React.Fragment>
-      <AppBar
-        component="div"
-        className={classes.secondaryBar}
-        position="static"
-        elevation={0}
-        style={{ backgroundColor: '#F06923' }}
-      >
-        <Toolbar>
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <Typography color="inherit" variant="h5" component="h1">
-                <img src={logo} alt="Logo" />
-              </Typography>
+  render() {
+    const { classes } = this.props;
+    const imageClick = () => {
+      window.location.reload();
+    } 
+
+    return (
+      <React.Fragment>
+        <AppBar
+          component="div"
+          className={classes.secondaryBar}
+          position="static"
+          elevation={0}
+          style={{ backgroundColor: '#F06923' }}
+        >
+          <Toolbar>
+            <Grid container alignItems="center">
+              <Grid item xs>
+              <a href={window.location.href}>
+                <img src={logo} alt="Logo"/>
+              </a>
+              </Grid>
+              <Grid item>
+                <Button className={classes.button} variant="outlined" color="inherit" size="medium" href="/insert">
+                  Create a recipe
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button className={classes.button} variant="outlined" color="inherit" size="medium" href="/insert">
-                Create a recipe
-              </Button>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-    </React.Fragment>
-  );
+          </Toolbar>
+        </AppBar>
+      </React.Fragment>
+    );
+  }
 }
-
-Header.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onDrawerToggle: PropTypes.func.isRequired,
-};
 
 export default withStyles(styles)(Header);
