@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { useState, /*useCallback,*/ useEffect } from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -70,18 +69,19 @@ const StyledMenuItem = withStyles(theme => ({
   },
 }))(MenuItem);
 
-function ShowSearch(props) {
+class ShowSearch extends Component {
 
-    const { classes } = props;
-    const [isError, setIsError] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [search, setSearch] = useState("");
-    const [recipes, setRecipes] = useState([]);
-    const [ingredient, setIngredient] = useState("");
-    const [dataIngredients, setDataIngredients] = useState([]);
-    const [searchByMeal, setSearchByMeal] = useState(false);
-    const [meal, setMeal] = useState("");
-    const [dataType, setDataType] = useState([{
+  constructor(props){
+    super(props);
+    this.state = {
+      isError: false,
+      anchorEl: null,
+      search: "",
+      recipes: [],
+      ingredient: "",
+      dataIngredients: [],
+      meal: "",
+      dataType: [{
         value: 'Breakfast & Brunch',
       }, {
         value: 'Lunch & Dinner',
@@ -91,103 +91,116 @@ function ShowSearch(props) {
         value: 'Appetizers & Snacks',
       },{
         value: 'Drinks',
-      },]);
+      },]
+    };
+    this.searchGet=this.searchGet.bind(this);
+    this.getAll=this.getAll.bind(this);
+    this.mealGet=this.mealGet.bind(this);
+    this.ingredientGet=this.ingredientGet.bind(this);
+    this.handleClick=this.handleClick.bind(this);
+    this.handleClose=this.handleClose.bind(this);
+  }
       
+  componentDidMount() {
+    console.log(sessionStorage.getItem('access_token'))
+    this.getAll();
 
-    useEffect(() => {
-
-        getAll();
-
-        //axios.get("http://192.168.1.68:8000/api/searchIngredientAll")
-        axios.get("http://localhost:8000/api/searchIngredientAll")
-        .then(resulti => {
-            if (resulti.status==200) { 
-              console.log(resulti.data)
-                setDataIngredients([]);
-                for (let ingObject of resulti.data) {
-                    var ing= ingObject.ingredient_name;
-                    setDataIngredients(dataIngredients =>[...dataIngredients, {value: ing}])
-                }
-            } else {
-                setIsError(true);
+    //axios.get("http://192.168.1.68:8000/api/searchIngredientAll")
+    axios.get("http://localhost:8000/api/searchIngredientAll")
+    .then(resulti => {
+        if (resulti.status==200) { 
+            this.setState({dataIngredients: []});
+            for (let ingObject of resulti.data) {
+                var ing= ingObject.ingredient_name;
+                this.setState(prevState => ({
+                  dataIngredients: [...prevState.dataIngredients, {value: ing}]
+                }))
             }
-        }).catch(e => {
-            setIsError(true);
-        });
-      }, []);
+        } else {
+          this.setState({isError: true})
+        }
+    }).catch(e => {
+      this.setState({isError: true})
+    });
+  }
 
-      const searchGet = () => {
-        console.log(search)
-        //axios.get("http://192.168.1.68:8000/api/searchRecipeName/name/"+search.text)
-        axios.get("http://localhost:8000/api/searchRecipeName/name/"+search)
-        .then(result => {
-            console.log(result)
-            if (result.status==200) { 
-                setRecipes(result.data);
-            } else {
-                setIsError(true);
-            }
-        }).catch(e => {
-            setIsError(true);
-        });
+  searchGet()
+  {
+    console.log(this.state.search)
+    //axios.get("http://192.168.1.68:8000/api/searchRecipeName/name/"+search.text)
+    axios.get("http://localhost:8000/api/searchRecipeName/name/"+this.state.search)
+    .then(result => {
+        if (result.status==200) { 
+          this.setState({recipes: result.data})
+        } else {
+          this.setState({isError: true})
+        }
+    }).catch(e => {
+      this.setState({isError: true})
+    });
+  }
+
+  getAll()
+  {
+    //axios.get("http://192.168.1.68:8000/api/searchRecipeAll")
+    axios.get("http://localhost:8000/api/searchRecipeAll")
+    .then(result => {
+        if (result.status==200) { 
+          this.setState({recipes: result.data})
+        } else {
+          this.setState({isError: true})
+        }
+    }).catch(e => {
+      this.setState({isError: true})
+    });
+  }
+
+  mealGet(mealValue)
+  {
+    console.log(mealValue)
+    //axios.get("http://192.168.1.68:8000/api/searchRecipeCategory/category/"+meal.value)
+    axios.get("http://localhost:8000/api/searchRecipeCategory/category/"+mealValue)
+    .then(result => {
+        console.log(result.data);
+        if (result.status==200) { 
+          this.setState({recipes: result.data})
+          this.handleClose()
+        } else {
+          this.setState({isError: true})
+        }
+    }).catch(e => {
+      this.setState({isError: true})
+    });
+  }
+
+  ingredientGet(ingredientValue)
+  {
+    console.log(ingredientValue)
+    //axios.get("http://192.168.1.68:8000/api/searchIngredientName/name/"+ingredient.value)
+    axios.get("http://localhost:8000/api/searchRecipeNameTotal/name/"+ingredientValue) 
+    .then(result => {
+        console.log(result.data);
+        if (result.status==200) { 
+          this.setState({recipes: result.data})
+          this.handleClose()
+        } else {
+          this.setState({isError: true})
+        }
+    }).catch(e => {
+      this.setState({isError: true})
+    });
+  }
+
+  handleClick = event => {
+    this.setState({anchorEl: event.currentTarget})
     };
 
-    const getAll = () => {
-        //axios.get("http://192.168.1.68:8000/api/searchRecipeAll")
-        axios.get("http://localhost:8000/api/searchRecipeAll")
-        .then(result => {
-            if (result.status==200) { 
-                setRecipes(result.data);
-                setSearchByMeal(false)
-            } else {
-                setIsError(true);
-            }
-        }).catch(e => {
-            setIsError(true);
-        });
-    }
+  handleClose = () => {
+    this.setState({anchorEl: null})
+  };
 
-    const mealGet = (mealValue) => {
-      console.log(mealValue)
-        //axios.get("http://192.168.1.68:8000/api/searchRecipeCategory/category/"+meal.value)
-        axios.get("http://localhost:8000/api/searchRecipeCategory/category/"+mealValue)
-        .then(result => {
-            console.log(result.data);
-            if (result.status==200) { 
-                setRecipes(result.data);
-                setSearchByMeal(false)
-            } else {
-                setIsError(true);
-            }
-        }).catch(e => {
-            setIsError(true);
-        });
-    };
-
-    const ingredientGet = (ingredientValue) => {
-      console.log(ingredientValue)
-        //axios.get("http://192.168.1.68:8000/api/searchIngredientName/name/"+ingredient.value)
-        axios.get("http://localhost:8000/api/searchRecipeNameTotal/name/"+ingredientValue) 
-        .then(result => {
-            console.log(result.data);
-            if (result.status==200) { 
-                setRecipes(result.data);
-                setSearchByMeal(false)
-            } else {
-                setIsError(true);
-            }
-        }).catch(e => {
-            setIsError(true);
-        });
-    };
-
-    const handleClick = event => {
-      setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
+  render() {
+    const { classes } = this.props;
 
     return (
       <Paper className={classes.paper}>
@@ -198,24 +211,24 @@ function ShowSearch(props) {
               aria-controls="customized-menu"
               aria-haspopup="true"
               variant="contained" 
-              onClick={handleClick} 
+              onClick={this.handleClick} 
               />
               <StyledMenu
                   id="customized-menu"
-                  anchorEl={anchorEl}
+                  anchorEl={this.state.anchorEl}
                   keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}>
+                  open={Boolean(this.state.anchorEl)}
+                  onClose={this.handleClose}>
                 <Typography color="textSecondary" align="center">Meal Type ></Typography>
-                {dataType.map((val, key)=>(
+                {this.state.dataType.map((val, key)=>(
                   <StyledMenuItem key={key}>
-                    <ListItemText primary={val.value} onClick={mealGet}/>    
+                    <ListItemText primary={val.value} onClick={() => this.mealGet(val.value)}/>
                   </StyledMenuItem>
                 ))}
                 <Typography color="textSecondary" align="center">Ingredients ></Typography>
-                {dataIngredients.map((val, key)=>(
+                {this.state.dataIngredients.map((val, key)=>(
                   <StyledMenuItem key={key}>
-                    <ListItemText primary={val.value} onClick={ingredientGet}/>    
+                    <ListItemText primary={val.value} onClick={() => this.ingredientGet(val.value)}/>
                   </StyledMenuItem>
                 ))}
               </StyledMenu>
@@ -230,25 +243,24 @@ function ShowSearch(props) {
                     className: classes.searchInput,
                   }}
                   onChange={e => {
-                    setSearch(e.target.value);
+                    this.setState({
+                      search: e.target.value
+                    });  
                   }}
                 />
               </Grid>
               <Grid item >
-                <Button variant="outlined" onClick={searchGet} /*onClick(função de get de receitas)*/>
+                <Button variant="outlined" onClick={this.searchGet} /*onClick(função de get de receitas)*/>
                   Search
                 </Button>
               </Grid>
             </Grid>
           </Toolbar>
         </AppBar>
-        <Content recipes={recipes}/>
+        <Content recipes={this.state.recipes}/>
       </Paper>
     );
+  }
 }
-
-ShowSearch.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(ShowSearch);

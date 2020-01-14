@@ -1,20 +1,36 @@
-import React from "react";
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { useAuth } from "../context/auth";
 import Button from '@material-ui/core/Button';
 
-function Insert(props) {
-  const { setAuthTokens } = useAuth();
+class Insert extends Component {
 
-  function logOut() {
-    setAuthTokens();
+  constructor(props){
+    super(props);
+    this.state = {
+      toShow: false,
+    };
+    this.handleLogOut=this.handleLogOut.bind(this);
   }
 
-  return (
-    <div>
-      <div>Insert Page - Teste</div>
-      <Button onClick={logOut}>Log out</Button>
-    </div>
-  );
+  handleLogOut()
+  {
+    sessionStorage.clear();
+    this.setState({toShow: true});
+  }
+
+  render() {
+    if (this.state.toShow === true) {
+      return <Redirect to='/signin'/>
+    }
+    
+    return (
+      <div>
+        <div>Insert Page - Teste</div>
+        <Button onClick={this.handleLogOut}>Log out</Button>
+      </div>
+    );
+  }
 }
 
 export default Insert;
