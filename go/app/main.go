@@ -1218,12 +1218,27 @@ func getRecipeIngredientsByRecipeRoute(w http.ResponseWriter, r *http.Request) {
 /**
 * Pesquisar uma receita por ingredientes
  */
-func getRecipeByIngredients(names []string) []byte {
+
+func getRecipeByIngredients(id string) []byte {
+	row := []Recipes{}
+	db := openConnDB()
+	query := "SELECT * FROM recipes WHERE recipe_id IN (select recipe_id from recipeingredients where ingredient_id = " + "'" + id + "')"
+	err := db.Select(&row, strings.ToLower(query))
+	if err != nil {
+		log.Fatal(err)
+	}
+	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	j, _ := json.Marshal(row)
+	closeConnDB(db)
+	return j
+}
+
+/*func getRecipeByIngredients(id string) []byte {
 	db := openConnDB()
 
 	row := []RecipeIngredients{}
 	valid_recipe := true
-	s := len(names)
+	//s := len(names)
 	recipes := getRecipeAllNoJson()
 	s_recipes := len(recipes)
 	ingredients := getIngredientAllByNameNoJson(names)
@@ -1255,15 +1270,15 @@ func getRecipeByIngredients(names []string) []byte {
 	j, _ := json.Marshal(valid_recipes)
 	closeConnDB(db)
 	return j
-}
+}*/
 
 /**
 * [Controller][RecipeIngredients] function to get RecipeIngredients by id
  */
 func getRecipeByIngredientsRoute(w http.ResponseWriter, r *http.Request) {
-	//vars := mux.Vars(r)
-	ingredient_names := []string{"tomate", "alface", "banana"}
-	rows := getRecipeByIngredients(ingredient_names)
+	vars := mux.Vars(r)
+	//ingredient_names := []string{"tomate", "alface", "banana"}
+	rows := getRecipeByIngredients(vars["id"]) //ingredient_names
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(rows)
@@ -1300,7 +1315,7 @@ func main() {
 	r.HandleFunc("/api/searchRecipeExactName/name/{name}", getRecipeByExactNameRoute).Methods("GET")
 	r.HandleFunc("/api/searchRecipeCategory/category/{category}", getRecipeByCategoryRoute).Methods("GET")
 	r.HandleFunc("/api/searchRecipeAll", getRecipeAllRoute).Methods("GET")
-	r.HandleFunc("/api/searchRecipeByIngredients", getRecipeByIngredientsRoute).Methods("GET")
+	r.HandleFunc("/api/searchRecipeByIngredients/id/{id}", getRecipeByIngredientsRoute).Methods("GET")
 	r.HandleFunc("/api/searchRecipeNameTotal/name/{name}", getRecipeByIngredientNameTotalRoute).Methods("GET")
 
 	//Ingredients routes
