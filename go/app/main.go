@@ -1219,10 +1219,10 @@ func getRecipeIngredientsByRecipeRoute(w http.ResponseWriter, r *http.Request) {
 * Pesquisar uma receita por ingredientes
  */
 
-func getRecipeByIngredients(id string) []byte {
+func getRecipeByIngredients(name string) []byte {
 	row := []Recipes{}
 	db := openConnDB()
-	query := "SELECT * FROM recipes WHERE recipe_id IN (select recipe_id from recipeingredients where ingredient_id = " + "'" + id + "')"
+	query := "SELECT * FROM recipes WHERE recipe_id IN (select recipe_id from recipeingredients where ingredient_id IN (select ingredient_id from ingredients where ingredient_name = " + "'" + name + "'))"
 	err := db.Select(&row, strings.ToLower(query))
 	if err != nil {
 		log.Fatal(err)
@@ -1278,7 +1278,7 @@ func getRecipeByIngredients(id string) []byte {
 func getRecipeByIngredientsRoute(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	//ingredient_names := []string{"tomate", "alface", "banana"}
-	rows := getRecipeByIngredients(vars["id"]) //ingredient_names
+	rows := getRecipeByIngredients(vars["name"]) //ingredient_names
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(rows)
@@ -1315,7 +1315,7 @@ func main() {
 	r.HandleFunc("/api/searchRecipeExactName/name/{name}", getRecipeByExactNameRoute).Methods("GET")
 	r.HandleFunc("/api/searchRecipeCategory/category/{category}", getRecipeByCategoryRoute).Methods("GET")
 	r.HandleFunc("/api/searchRecipeAll", getRecipeAllRoute).Methods("GET")
-	r.HandleFunc("/api/searchRecipeByIngredients/id/{id}", getRecipeByIngredientsRoute).Methods("GET")
+	r.HandleFunc("/api/searchRecipeByIngredients/name/{name}", getRecipeByIngredientsRoute).Methods("GET")
 	r.HandleFunc("/api/searchRecipeNameTotal/name/{name}", getRecipeByIngredientNameTotalRoute).Methods("GET")
 
 	//Ingredients routes
