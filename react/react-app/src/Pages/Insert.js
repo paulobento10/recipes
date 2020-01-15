@@ -8,7 +8,7 @@ class Insert extends Component {
   constructor(props){
     super(props);
     this.state = {
-      toShow: false,
+      toSignIn: false,
     };
     this.handleLogOut=this.handleLogOut.bind(this);
   }
@@ -16,11 +16,11 @@ class Insert extends Component {
   handleLogOut()
   {
     sessionStorage.clear();
-    this.setState({toShow: true});
+    this.setState({toSignIn: true});
   }
 
   render() {
-    if (this.state.toShow === true) {
+    if (this.state.toSignIn === true) {
       return <Redirect to='/signin'/>
     }
     

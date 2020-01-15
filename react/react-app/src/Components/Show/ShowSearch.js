@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { useState, /*useCallback,*/ useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -86,7 +85,7 @@ class ShowSearch extends Component {
       }, {
         value: 'Lunch & Dinner',
       }, {
-        value: 'Desert',
+        value: 'Dessert',
       }, {
         value: 'Appetizers & Snacks',
       },{
@@ -102,7 +101,6 @@ class ShowSearch extends Component {
   }
       
   componentDidMount() {
-    console.log(sessionStorage.getItem('access_token'))
     this.getAll();
 
     //axios.get("http://192.168.1.68:8000/api/searchIngredientAll")
@@ -175,11 +173,9 @@ class ShowSearch extends Component {
 
   ingredientGet(ingredientValue)
   {
-    console.log(ingredientValue)
-    //axios.get("http://192.168.1.68:8000/api/searchIngredientName/name/"+ingredient.value)
-    axios.get("http://localhost:8000/api/searchRecipeNameTotal/name/"+ingredientValue) 
+    axios.get("http://localhost:8000/api/searchRecipeByIngredients/name/"+ingredientValue) 
     .then(result => {
-        console.log(result.data);
+        console.log(result);
         if (result.status==200) { 
           this.setState({recipes: result.data})
           this.handleClose()

@@ -38,9 +38,6 @@ class Header extends Component {
 
   render() {
     const { classes } = this.props;
-    const imageClick = () => {
-      window.location.reload();
-    } 
 
     return (
       <React.Fragment>
@@ -54,7 +51,7 @@ class Header extends Component {
           <Toolbar>
             <Grid container alignItems="center">
               <Grid item xs>
-              <a href={window.location.href}>
+              <a href="http://localhost:3000/show/">
                 <img src={logo} alt="Logo"/>
               </a>
               </Grid>
