@@ -173,7 +173,7 @@ class ShowSearch extends Component {
 
   ingredientGet(ingredientValue)
   {
-    axios.get("http://localhost:8000/api/searchRecipeByIngredients/name/"+ingredientValue) 
+    axios.get("http://localhost:8000/api/searchRecipeNameTotal/name/"+ingredientValue) 
     .then(result => {
         console.log(result);
         if (result.status==200) { 
