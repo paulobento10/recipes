@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -30,9 +31,26 @@ const styles = theme => ({
   },
 });
 
-class Header extends Component {
+class EditRemoveHeader extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            toSignIn: false,
+        };
+        this.handleLogOut=this.handleLogOut.bind(this);
+    }
 
-  render() {
+    handleLogOut()
+    {
+        sessionStorage.clear();
+        this.setState({toSignIn: true});
+    }
+
+    render() {
+    if (this.state.toSignIn === true) {
+        return <Redirect to='/signin'/>
+    }
+
     const { classes } = this.props;
 
     return (
@@ -52,8 +70,8 @@ class Header extends Component {
               </a>
               </Grid>
               <Grid item>
-                <Button className={classes.button} variant="outlined" color="inherit" size="medium" href="/editremove"> 
-                  My Creations
+                <Button className={classes.button} variant="outlined" color="inherit" size="medium" onClick={this.handleLogOut}> 
+                  Log Out
                 </Button>
               </Grid>
             </Grid>
@@ -64,4 +82,4 @@ class Header extends Component {
   }
 }
 
-export default withStyles(styles)(Header);
+export default withStyles(styles)(EditRemoveHeader);

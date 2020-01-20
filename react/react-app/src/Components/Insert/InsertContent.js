@@ -1,23 +1,13 @@
 import React, { Component } from 'react';
-import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Avatar from '@material-ui/core/Avatar';
-import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField'
 import SelectIngredients from 'react-select';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import axios from 'axios'; 
 import makeAnimated from 'react-select/animated';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -75,18 +65,10 @@ class InsertContent extends Component {
       recipe_description:"",
       duration:"",
       picture:"",
+      kcal: "",
       category:"",
       ingredients: [],
       selectedOptions: [],
-      Countries: [
-        { label: "Albania", value: 355 },
-        { label: "Argentina", value: 54 },
-        { label: "Austria", value: 43 },
-        { label: "Cocos Islands", value: 61 },
-        { label: "Kuwait", value: 965 },
-        { label: "Sweden", value: 46 },
-        { label: "Venezuela", value: 58 }
-      ],
     };
     this.handleChange=this.handleChange.bind(this);
     this.handleCreate=this.handleCreate.bind(this);
@@ -99,7 +81,8 @@ class InsertContent extends Component {
             resulti.data.forEach(element => {
                 var ing= element.ingredient_name;
                 var ing_id= element.ingredient_id;
-                this.setState({ingredients: [...this.state.ingredients, {label: ing, value: ing_id}]})
+                var ing_kcal=element.kcal;
+                this.setState({ingredients: [...this.state.ingredients, {label: ing, value: ing_id, kcal: ing_kcal}]})
             });
         }
     })
@@ -107,6 +90,8 @@ class InsertContent extends Component {
 
   handleChange = (selectedOptions) => {
     this.setState({ selectedOptions });
+    const calorieStringTotal = selectedOptions.reduce((totalCalories, meal) => totalCalories + parseInt(meal.kcal, 10), 0);
+    this.setState({kcal: calorieStringTotal})
   }
 
   handleCreate () {
@@ -116,7 +101,7 @@ class InsertContent extends Component {
         duration: this.state.duration,
         picture: this.state.picture,
         category: this.state.category,
-        kcal: "0",
+        kcal: this.state.kcal,
         user_id: parseInt(sessionStorage.getItem('access_token')) 
       }
       
@@ -183,7 +168,6 @@ class InsertContent extends Component {
             id="recipe_description"
             label="Description"
             name="recipe_description"
-            autoFocus
             onChange={e => {
               this.setState({
                 recipe_description: e.target.value
@@ -199,7 +183,6 @@ class InsertContent extends Component {
             label="Duration"
             name="duration"
             type="number"
-            autoFocus
             onChange={e => {
               this.setState({
                 duration: e.target.value
@@ -214,29 +197,12 @@ class InsertContent extends Component {
             id="picture"
             label="Picture URL"
             name="picture"
-            autoFocus
             onChange={e => {
               this.setState({
                 picture: e.target.value
               });  
             }}
-          />
-          <TextField
-            ref="kcal"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            id="kcal"
-            label="Kcal"
-            name="kcal"
-            type="number"
-            autoFocus
-            onChange={e => {
-              this.setState({
-                kcal: e.target.value
-              });  
-            }}
-          />  
+          /> 
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">Category</InputLabel>
             <Select

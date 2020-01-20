@@ -182,6 +182,7 @@ class Recipe extends Component {
       return <Redirect to='/show'/>
     }
     const { classes } = this.props;
+    console.log(this.state.recipe);
     
     return (
       <ThemeProvider theme={theme}>
