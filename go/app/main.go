@@ -500,7 +500,7 @@ func editIngredient(i Ingredients) bool {
 
 	//As an ingredient gets its kcal updated, so does the recipes it belongs to should
 
-	row := []RecipeIngredients{}
+	/*row := []RecipeIngredients{}
 	query := "SELECT * FROM recipeingredients where ingredient_id = " + strconv.Itoa(i.Ingredient_id)
 	err := db.Select(&row, strings.ToLower(query))
 	if err != nil {
@@ -530,11 +530,11 @@ func editIngredient(i Ingredients) bool {
 		/*err = tx.Commit()
 		if err != nil {
 			return false
-		}*/
-	}
+		}
+	}*/
 
 	//tx.NamedExec()
-	err = tx.Commit()
+	err := tx.Commit()
 
 	if err != nil {
 		return false
@@ -650,15 +650,15 @@ func getRecipeByIngredientNameTotal(ingredient_name string) []byte {
 func insertRecipeIngredients(r RecipeIngredients) bool {
 	//As an ingredient was added to the recipe its kcal, must be added to the kcal of the recipe
 	db := openConnDB()
-
-	recipe_kcal := getRecipeKcalByRecipeId(strconv.Itoa(r.Recipe_id))
+	tx := db.MustBegin()
+	/*recipe_kcal := getRecipeKcalByRecipeId(strconv.Itoa(r.Recipe_id))
 	ingredient_kcal := getIngredientKcalById(strconv.Itoa(r.Ingredient_id))
 
 	var re Recipes
 	kcal_total := recipe_kcal + ingredient_kcal
 	tx := db.MustBegin()
 	query := "UPDATE recipes SET kcal=" + strconv.Itoa(kcal_total) + " WHERE recipe_id= " + strconv.Itoa(r.Recipe_id)
-	tx.NamedExec(strings.ToLower(query), &re)
+	tx.NamedExec(strings.ToLower(query), &re)*/
 
 	tx.NamedExec("INSERT INTO recipeingredients (ingredient_id, recipe_id) VALUES (:ingredient_id, :recipe_id)", &r)
 	err := tx.Commit()
@@ -693,7 +693,9 @@ func editRecipeIngredients(r RecipeIngredients) bool {
 func deleteRecipeIngredients(id string) bool {
 	//As an ingredient was removed from recipeIngredients so should its kcal be removed
 	db := openConnDB()
-	var r RecipeIngredients
+	tx := db.MustBegin()
+
+	/*var r RecipeIngredients
 	r.Recipe_id = getRecipeIngredientsByIdRecipeId(id)
 	r.Ingredient_id = getRecipeIngredientsByIdIngredientId(id)
 	log.Println("recipe_id: " + strconv.Itoa(r.Recipe_id))
@@ -705,7 +707,7 @@ func deleteRecipeIngredients(id string) bool {
 	var re Recipes
 	tx := db.MustBegin()
 	query := "UPDATE recipes SET kcal=" + strconv.Itoa(kcal_total) + " WHERE recipe_id= " + strconv.Itoa(r.Recipe_id)
-	tx.NamedExec(strings.ToLower(query), &re)
+	tx.NamedExec(strings.ToLower(query), &re)*/
 
 	tx.MustExec("DELETE FROM recipeingredients WHERE recipeingredient_id=" + id)
 	err := tx.Commit()
