@@ -23,6 +23,7 @@ ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredient_user_id_fkey;
 ALTER TABLE ONLY public.directions DROP CONSTRAINT directions_recipe_id_fkey;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_user_name_key;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
+ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_recipe_name_key;
 ALTER TABLE ONLY public.recipes DROP CONSTRAINT recipes_pkey;
 ALTER TABLE ONLY public.recipeingredients DROP CONSTRAINT recipeingredients_pkey;
 ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredients_pkey;
@@ -380,6 +381,14 @@ ALTER TABLE ONLY public.recipeingredients
 
 ALTER TABLE ONLY public.recipes
     ADD CONSTRAINT recipes_pkey PRIMARY KEY (recipe_id);
+
+
+--
+-- Name: recipes recipes_recipe_name_key; Type: CONSTRAINT; Schema: public; Owner: docker
+--
+
+ALTER TABLE ONLY public.recipes
+    ADD CONSTRAINT recipes_recipe_name_key UNIQUE (recipe_name);
 
 
 --
