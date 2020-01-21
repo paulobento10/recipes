@@ -73,6 +73,8 @@ class EditRemoveContent extends Component {
         ],
         dataIngredients: [],
       };
+      this.handleGetIngredients=this.handleGetIngredients.bind(this);
+      this.handleGetRecipes=this.handleGetRecipes.bind(this);
       this.handleChangePage=this.handleChangePage.bind(this);
       this.handleChangeRowsPerPage=this.handleChangeRowsPerPage.bind(this);
       this.handleDeleteRecipe=this.handleDeleteRecipe.bind(this);
@@ -82,13 +84,11 @@ class EditRemoveContent extends Component {
     }
 
     componentDidMount() {
-      axios.get("http://localhost:8000/api/getIngredientByUserIdRoute/id/"+sessionStorage.getItem('access_token'))
-      .then(resulti => {
-          if (resulti.status==200) { 
-              this.setState({dataIngredients: resulti.data});
-          }
-      })
+      this.handleGetRecipes()
+      this.handleGetIngredients()
+    }
 
+    handleGetRecipes(){
       axios.get("http://localhost:8000/api/searchUserRecipe/id/"+sessionStorage.getItem('access_token'))
       .then(resulti => {
           if (resulti.status==200) { 
@@ -97,14 +97,21 @@ class EditRemoveContent extends Component {
       })
     }
 
+    handleGetIngredients(){
+      axios.get("http://localhost:8000/api/getIngredientByUserIdRoute/id/"+sessionStorage.getItem('access_token'))
+      .then(resulti => {
+          if (resulti.status==200) { 
+              this.setState({dataIngredients: resulti.data});
+          }
+      })
+    }
+
     //r.HandleFunc("/api/deleteRecipe/id/{id}", deleteRecipeRoute).Methods("DELETE")
     handleDeleteRecipe = key => {
       axios.delete('http://localhost:8000/api/deleteRecipe/id/'+key)
       .then(resulti => {
-          console.log(resulti);
-          const dataRecipes = [...this.state.dataRecipes];
-          this.setState({ dataRecipes: dataRecipes.filter(item => item.key !== key) });
-      })
+        this.handleGetRecipes();
+      })      
     }
 
     //r.HandleFunc("/api/editRecipeName", editRecipeNameRoute).Methods("POST")
@@ -116,11 +123,8 @@ class EditRemoveContent extends Component {
     handleDeleteIngredient = key => {
       axios.delete('http://localhost:8000/api/deleteIngredient/id/'+key)
       .then(resulti => {
-          console.log(resulti);
-          const dataIngredients = [...this.state.dataIngredients];
-          this.setState({ dataIngredients: dataIngredients.filter(item => item.key !== key) });
+          this.handleGetIngredients();
       })
-      
     }
 
     //r.HandleFunc("/api/editIngredientName", editIngredientNameRoute).Methods("POST")
