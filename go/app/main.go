@@ -169,7 +169,7 @@ func deleteUser(id string) bool {
 func checkUser(email string, pass string) int {
 	var u User
 	db := openConnDB()
-	err := db.Get(&u, "SELECT * FROM users WHERE email like "+"'"+email+"'")
+	err := db.Get(&u, "SELECT * FROM users WHERE email = "+"'"+email+"'")
 	if err != nil {
 		return -1
 	}
@@ -651,7 +651,7 @@ func getRecipeByIngredientNameTotal(ingredient_name string) []byte {
 	//query := "SELECT * FROM recipeingredients WHERE ingredient_id = " + ingredient_id
 	ingredient_name = "'" + ingredient_name + "'"
 	query := "SELECT * FROM recipes where recipe_id IN (SELECT recipe_id FROM recipeingredients WHERE ingredient_id IN (select ingredient_id from ingredients where ingredient_name = " + ingredient_name + "))"
-	err := db.Select(&row, strings.ToLower(query))
+	err := db.Select(&row, query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -1292,7 +1292,7 @@ func getRecipeByIngredients(names []string) []byte {
  */
 func getRecipeByIngredientsRoute(w http.ResponseWriter, r *http.Request) {
 	//vars := mux.Vars(r)
-	ingredient_names := []string{"tomate", "alface", "banana"}
+	ingredient_names := []string{"tomate", "alface", "Banana"}
 	rows := getRecipeByIngredients(ingredient_names)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
