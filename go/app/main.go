@@ -496,7 +496,7 @@ func getIngredientKcalById(id string) int {
 func insertIngredient(i Ingredients) bool {
 	db := openConnDB()
 	tx := db.MustBegin()
-	tx.NamedExec("INSERT INTO ingredients (ingredient_name, kcal) VALUES (:ingredient_name, :kcal)", &i)
+	tx.NamedExec("INSERT INTO ingredients (ingredient_name, kcal, user_id) VALUES (:ingredient_name, :kcal, :user_id)", &i)
 	err := tx.Commit()
 	if err != nil {
 		return false
