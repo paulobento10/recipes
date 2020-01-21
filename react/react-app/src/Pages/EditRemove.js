@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import Header from '../Components/EditRemove/EditRemoveHeader';
 import Copyright from "../Components/Copyright";
 import Content from "../Components/EditRemove/EditRemoveContent"
@@ -138,7 +137,7 @@ class EditRemove extends Component {
   render() {
     const { classes } = this.props;
 
-    if (sessionStorage.getItem('access_token') < 0) {
+    if (sessionStorage.getItem('access_token') < 0 || sessionStorage.getItem('access_token')==null) {
       return <Redirect to='/signin'/>
     }
 

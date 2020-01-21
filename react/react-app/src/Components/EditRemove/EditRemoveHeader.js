@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import { withStyles } from '@material-ui/core/styles';
@@ -32,26 +33,26 @@ const styles = theme => ({
 });
 
 class EditRemoveHeader extends Component {
-    constructor(props){
+  constructor(props){
         super(props);
         this.state = {
-            toSignIn: false,
-        };
-        this.handleLogOut=this.handleLogOut.bind(this);
-    }
+          toSignIn: false,
+      };
+      this.handleLogOut=this.handleLogOut.bind(this);
+  }
+  
+  handleLogOut()
+  {
+      sessionStorage.clear();
+      this.setState({toSignIn: true});
+  }
 
-    handleLogOut()
-    {
-        sessionStorage.clear();
-        this.setState({toSignIn: true});
-    }
-
-    render() {
-    if (this.state.toSignIn === true) {
-        return <Redirect to='/signin'/>
-    }
-
+  render() {
     const { classes } = this.props;
+
+    if (this.state.toSignIn === true) {
+      return <Redirect to='/signin'/>
+    }
 
     return (
       <React.Fragment>
@@ -63,6 +64,9 @@ class EditRemoveHeader extends Component {
           style={{ backgroundColor: '#F06923' }}
         >
           <Toolbar>
+            <Grid alignItems="left">
+                <ExitToAppIcon onClick={this.handleLogOut}/>
+            </Grid>
             <Grid container alignItems="center">
               <Grid item xs>
               <a href="http://localhost:3000/show/">
@@ -70,8 +74,8 @@ class EditRemoveHeader extends Component {
               </a>
               </Grid>
               <Grid item>
-                <Button className={classes.button} variant="outlined" color="inherit" size="medium" onClick={this.handleLogOut}> 
-                  Log Out
+                <Button className={classes.button} variant="outlined" color="inherit" size="medium" href="/insert"> 
+                  Create Recipe
                 </Button>
               </Grid>
             </Grid>

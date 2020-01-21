@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import { Table, Divider, Tag } from 'antd';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Table } from 'antd';
 import { Typography } from '@material-ui/core';
+import EditRecipeModal from './EditRecipeModal';
+import EditIngredientModal from './EditIngredientModal';
 import axios from 'axios'; 
 
 class EditRemoveContent extends Component {
@@ -36,14 +37,17 @@ class EditRemoveContent extends Component {
           key: 'category',
         },
         {
-          title: 'Actions',
-          key: 'actions',
+          title: 'Edit',
+          key: 'edit',
           render: (text, record) => (
-            <span>
-              <a onClick={() => this.handleEditRecipeName(record.recipe_id)}>Edit</a>
-              <Divider type="vertical" />
-              <a onClick={() => this.handleDeleteRecipe(record.recipe_id)}>Delete</a> 
-            </span>
+                <EditRecipeModal recipe={record}/>
+          ),
+        },
+        {
+          title: 'Delete',
+          key: 'delete',
+          render: (text, record) => (
+                <DeleteIcon onClick={() => this.handleDeleteRecipe(record.recipe_id)}/>
           ),
         },
       ],
@@ -60,13 +64,20 @@ class EditRemoveContent extends Component {
             key: 'kcal',
           },
           {
-            title: 'Actions',
-            key: 'actions',
+            title: 'Edit',
+            key: 'edit',
             render: (text, record) => (
               <span>
-                <a onClick={() => this.handleEditIngredientName(record.ingredient_id)}>Edit</a>
-                <Divider type="vertical" />
-                <a onClick={() => this.handleDeleteIngredient(record.ingredient_id)}>Delete</a> 
+                <EditIngredientModal ingredient={record}/>
+              </span>
+            ),
+          },
+          {
+            title: 'Delete',
+            key: 'delete',
+            render: (text, record) => (
+              <span>
+                <DeleteIcon onClick={() => this.handleDeleteIngredient(record.ingredient_id)}/>
               </span>
             ),
           },
@@ -79,8 +90,6 @@ class EditRemoveContent extends Component {
       this.handleChangeRowsPerPage=this.handleChangeRowsPerPage.bind(this);
       this.handleDeleteRecipe=this.handleDeleteRecipe.bind(this);
       this.handleDeleteIngredient=this.handleDeleteIngredient.bind(this);
-      this.handleEditRecipeName=this.handleEditRecipeName.bind(this);
-      this.handleEditIngredientName=this.handleEditIngredientName.bind(this);
     }
 
     componentDidMount() {
@@ -114,22 +123,12 @@ class EditRemoveContent extends Component {
       })      
     }
 
-    //r.HandleFunc("/api/editRecipeName", editRecipeNameRoute).Methods("POST")
-    handleEditRecipeName = key => {
-      alert("Edit Recipe not done yet!");
-    }
-
     //r.HandleFunc("/api/deleteIngredient/id/{id}", deleteIngredientRoute).Methods("DELETE")
     handleDeleteIngredient = key => {
       axios.delete('http://localhost:8000/api/deleteIngredient/id/'+key)
       .then(resulti => {
           this.handleGetIngredients();
       })
-    }
-
-    //r.HandleFunc("/api/editIngredientName", editIngredientNameRoute).Methods("POST")
-    handleEditIngredientName = key => {
-      alert("Edit Ingredient not done yet");
     }
 
     handleChangePage = (event, newPage) => {
