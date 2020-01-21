@@ -91,7 +91,7 @@ class InsertContent extends Component {
   handleChange = (selectedOptions) => {
     this.setState({ selectedOptions });
     const calorieStringTotal = selectedOptions.reduce((totalCalories, meal) => totalCalories + parseInt(meal.kcal, 10), 0);
-    this.setState({kcal: calorieStringTotal})
+    this.setState({kcal: calorieStringTotal.toString()})
   }
 
   handleCreate () {
@@ -121,13 +121,13 @@ class InsertContent extends Component {
                     }
                     axios.post("http://localhost:8000/api/insertRecipeIngredients", elementIng)
                     .then(resultj => {  
-                        
+
                       if (resultj.data==true) {
                         console.log('Success inserting ingredients');
                       } 
                     })
                 });
-                this.setState({toShow: true})
+                //this.setState({toShow: true})
               }
             })
           }
