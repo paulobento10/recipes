@@ -119,7 +119,16 @@ class EditRemoveContent extends Component {
     handleDeleteRecipe = key => {
       axios.delete('http://localhost:8000/api/deleteRecipe/id/'+key)
       .then(resulti => {
-        this.handleGetRecipes();
+        if(resulti.status==200){
+          for (let i = 0; i < this.state.dataRecipes.length; i++) {
+            if(this.state.dataRecipes[i].recipe_id==key){
+              console.log(this.state.dataRecipes[i]);
+              var array = [...this.state.dataRecipes]; // make a separate copy of the array
+              array.splice(i, 1);
+              this.setState({dataRecipes: array});
+            }
+          }
+        }
       })      
     }
 
@@ -127,7 +136,16 @@ class EditRemoveContent extends Component {
     handleDeleteIngredient = key => {
       axios.delete('http://localhost:8000/api/deleteIngredient/id/'+key)
       .then(resulti => {
-          this.handleGetIngredients();
+        if(resulti.status==200){
+          for (let i = 0; i < this.state.dataIngredients.length; i++) {
+            if(this.state.dataIngredients[i].ingredient_id==key){
+              console.log(this.state.dataIngredients[i]);
+              var array = [...this.state.dataIngredients]; // make a separate copy of the array
+              array.splice(i, 1);
+              this.setState({dataIngredients: array});
+            }
+          }
+        }
       })
     }
 
