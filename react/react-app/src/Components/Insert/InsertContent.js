@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import { Redirect } from 'react-router-dom';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -11,6 +12,7 @@ import SelectIngredients from 'react-select';
 import axios from 'axios'; 
 import makeAnimated from 'react-select/animated';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import InsertModal from './InsertModal';
 
 const animatedComponents = makeAnimated();
 
@@ -52,6 +54,14 @@ const useStyles = theme => ({
   select: {
     width: '100%',
     padding: theme.spacing(1,0),
+  },
+  rootIng: {
+    '& svg': {
+      margin: theme.spacing(1),
+    },
+    '& hr': {
+      margin: theme.spacing(1, 2.5),
+    },
   },
 });
 
@@ -127,12 +137,12 @@ class InsertContent extends Component {
                       } 
                     })
                 });
-                //this.setState({toShow: true})
+                this.setState({toShow: true})
               }
             })
           }
       })
-  };
+  }
 
   render() {
     const { classes } = this.props;
@@ -151,7 +161,6 @@ class InsertContent extends Component {
             id="recipe_name"
             label="Recipe Name"
             name="recipe_name"
-            autoFocus
             onChange={e => {
               this.setState({
                 recipe_name: e.target.value
@@ -223,9 +232,16 @@ class InsertContent extends Component {
                 <MenuItem value={'Drinks'}>Drinks</MenuItem>
             </Select>
           </FormControl>
+
+          <Grid container direction="row" alignItems="center" className={classes.rootIng}>
+            <Grid item xs={11}>
+              <SelectIngredients className={classes.select} onChange={this.handleChange} placeholder="Select Ingredients" isMulti options={this.state.ingredients} components={animatedComponents} />
+            </Grid>
+            <Grid item xs={1}>
+              <InsertModal/>
+            </Grid>
+          </Grid>
           
-          <SelectIngredients className={classes.select} onChange={this.handleChange} placeholder="Select Ingredients" isMulti options={this.state.ingredients} components={animatedComponents} />
-        
           <Button
             fullWidth
             variant="contained"

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
+import { createMuiTheme, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from '../Components/Insert/InsertHeader';
 import Copyright from "../Components/Copyright";
@@ -151,7 +151,7 @@ class Insert extends Component {
   render() {
     const { classes } = this.props;
 
-    if (sessionStorage.getItem('access_token') < 0) {
+    if (sessionStorage.getItem('access_token') < 0 || sessionStorage.getItem('access_token')==null) {
       return <Redirect to='/signin'/>
     }
 
