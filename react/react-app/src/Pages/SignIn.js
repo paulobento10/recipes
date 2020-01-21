@@ -78,7 +78,7 @@ class SignIn extends Component {
         {
           alert("Password or username wrong!");
         }
-        else if (response.data !== -1){// if (response.data.access_token){
+        else if (response.data !== -1){
           sessionStorage.setItem('access_token', response.data);
           this.setState({toShow: true});
           console.log(sessionStorage)
@@ -143,12 +143,6 @@ class SignIn extends Component {
                   });  
                 }}
               />
-              {/*}
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              */}
               <Button
                 type="submit"
                 fullWidth

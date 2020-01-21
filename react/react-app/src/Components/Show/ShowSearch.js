@@ -103,7 +103,6 @@ class ShowSearch extends Component {
   componentDidMount() {
     this.getAll();
 
-    //axios.get("http://192.168.1.68:8000/api/searchIngredientAll")
     axios.get("http://localhost:8000/api/searchIngredientAll")
     .then(resulti => {
         if (resulti.status==200) { 
@@ -125,7 +124,6 @@ class ShowSearch extends Component {
   searchGet()
   {
     console.log(this.state.search)
-    //axios.get("http://192.168.1.68:8000/api/searchRecipeName/name/"+search.text)
     axios.get("http://localhost:8000/api/searchRecipeName/name/"+this.state.search)
     .then(result => {
         if (result.status==200) { 
@@ -140,7 +138,6 @@ class ShowSearch extends Component {
 
   getAll()
   {
-    //axios.get("http://192.168.1.68:8000/api/searchRecipeAll")
     axios.get("http://localhost:8000/api/searchRecipeAll")
     .then(result => {
         if (result.status==200) { 
@@ -156,7 +153,6 @@ class ShowSearch extends Component {
   mealGet(mealValue)
   {
     console.log(mealValue)
-    //axios.get("http://192.168.1.68:8000/api/searchRecipeCategory/category/"+meal.value)
     axios.get("http://localhost:8000/api/searchRecipeCategory/category/"+mealValue)
     .then(result => {
         console.log(result.data);
@@ -233,7 +229,7 @@ class ShowSearch extends Component {
               <Grid item xs={10}>
                 <TextField
                   fullWidth
-                  placeholder="Search by name"  //a pesquisa por ingredientes pode ser como este site usa https://www.allrecipes.com/
+                  placeholder="Search by name"  
                   InputProps={{
                     disableUnderline: true,
                     className: classes.searchInput,
@@ -246,7 +242,7 @@ class ShowSearch extends Component {
                 />
               </Grid>
               <Grid item >
-                <Button variant="outlined" onClick={this.searchGet} /*onClick(função de get de receitas)*/>
+                <Button variant="outlined" onClick={this.searchGet}>
                   Search
                 </Button>
               </Grid>

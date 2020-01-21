@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Image } from 'react-bootstrap';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import Divider from '@material-ui/core/Divider';
 import KeyboardArrowRightOutlinedIcon from '@material-ui/icons/KeyboardArrowRightOutlined';
-import axios from 'axios';
 
 const useStyles = theme => ({
   grid: {

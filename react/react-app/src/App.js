@@ -28,7 +28,6 @@ function App(props) {
               <Route exact path="/insert" component={Insert}/> 
               <Route exact path="/editremove" component={EditRemove}/>
               <Route exact path="/show/recipe/:id" component={Recipe}/>
-
             </Switch>
           </div>
         </Router>
