@@ -308,6 +308,7 @@ func editRecipeName(r Recipes) bool {
 func deleteRecipe(id string) bool {
 	db := openConnDB()
 	tx := db.MustBegin()
+	tx.MustExec("DELETE FROM recipeingredients WHERE recipe_id=" + id)
 	tx.MustExec("DELETE FROM recipes WHERE recipe_id=" + id)
 	err := tx.Commit()
 	if err != nil {
@@ -998,7 +999,7 @@ func deleteRecipeRoute(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	result := deleteRecipe(vars["id"])
 	j, _ := json.Marshal(result)
-	w.WriteHeader(http.StatusOK)
+	//w.WriteHeader(http.StatusOK)
 	w.Write(j)
 }
 
