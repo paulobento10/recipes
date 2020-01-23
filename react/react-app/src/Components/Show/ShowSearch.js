@@ -230,6 +230,12 @@ class ShowSearch extends Component {
                 <TextField
                   fullWidth
                   placeholder="Search by name"  
+                  onKeyPress={ (e) => {
+                    if (e.key === 'Enter') {
+                      console.log('Enter key pressed');
+                      this.searchGet();
+                    }
+                  }}
                   InputProps={{
                     disableUnderline: true,
                     className: classes.searchInput,
