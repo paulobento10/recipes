@@ -25,7 +25,8 @@ class InsertModal extends Component {
         ingredient_name: "",
         kcal:"",
         user_id: 0,
-        modalIsOpen: false
+        modalIsOpen: false,
+        auxIngredients: []
       };
       this.handlePost=this.handlePost.bind(this);
       this.openModal = this.openModal.bind(this);
@@ -52,13 +53,18 @@ class InsertModal extends Component {
             kcal: this.state.kcal,
             user_id: parseInt(sessionStorage.getItem('access_token')) 
         }
-        console.log(ingredient);
         
         axios.post("http://localhost:8000/api/insertIngredient", ingredient)
         .then(result => {
-            console.log(result);
             if (result.data==true) {
-                window.location.reload();
+                this.setState({auxIngredients: this.props.ingredients}) //Preencher um array local com o array de ingredientes enviado pelo parent component
+                var ing= ingredient.ingredient_name;
+                var ing_id= ingredient.ingredient_id;
+                var ing_kcal=ingredient.kcal;
+                this.setState({auxIngredients: [...this.state.auxIngredients, {label: ing, value: ing_id, kcal: ing_kcal}]})    //adicionar ao array local o novo ingrediente 
+                this.props.handleChangeArray(this.state.auxIngredients) //chamar a função do parent component e enviar o array local (no parent component, esta função ira substituir o array de ingredientes por este array que lhe enviamos)
+                
+                this.closeModal();
             }
         })
     }

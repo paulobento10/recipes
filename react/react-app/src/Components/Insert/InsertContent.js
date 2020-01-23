@@ -82,6 +82,7 @@ class InsertContent extends Component {
     };
     this.handleChange=this.handleChange.bind(this);
     this.handleCreate=this.handleCreate.bind(this);
+    this.handleUpdateIngredients=this.handleUpdateIngredients.bind(this);
   }
 
   componentDidMount() {
@@ -96,6 +97,11 @@ class InsertContent extends Component {
             });
         }
     })
+  }
+
+  handleUpdateIngredients(array){
+    console.log("Handle Update Ingredients (Parant Component)");
+    this.setState({ingredients: array});
   }
 
   handleChange = (selectedOptions) => {
@@ -238,7 +244,7 @@ class InsertContent extends Component {
               <SelectIngredients className={classes.select} onChange={this.handleChange} placeholder="Select Ingredients" isMulti options={this.state.ingredients} components={animatedComponents} />
             </Grid>
             <Grid item xs={1}>
-              <InsertModal/>
+              <InsertModal handleChangeArray={this.handleUpdateIngredients} ingredients={this.state.ingredients}/>
             </Grid>
           </Grid>
           
