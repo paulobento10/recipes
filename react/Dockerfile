@@ -13,9 +13,9 @@ COPY ./react/react-app ./
 # & 
 #RUN
 
-COPY ./react/react-app/remendo.sh /usr/bin/
-RUN chmod +x /usr/bin/remendo.sh
-CMD remendo.sh 
+COPY ./react/react-app/script.sh /usr/bin/
+RUN chmod +x /usr/bin/script.sh
+CMD script.sh 
 
 # if dev settings will use create-react start script for hot code relaoding via docker-compose shared volume
 # if production setting will build optimized static files and serve using http-server
