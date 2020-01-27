@@ -493,8 +493,8 @@ func getIngredientKcalById(id string) int {
 /**
 * [Model][Ingredients] Receives a ingredient as parameter and inserts it in the database
  */
-func insertIngredient(i Ingredients) bool {
-	db := openConnDB()
+func insertIngredient(i Ingredients) int {
+	/*db := openConnDB()
 	tx := db.MustBegin()
 	tx.NamedExec("INSERT INTO ingredients (ingredient_name, kcal, user_id) VALUES (:ingredient_name, :kcal, :user_id)", &i)
 	err := tx.Commit()
@@ -502,7 +502,24 @@ func insertIngredient(i Ingredients) bool {
 		return false
 	}
 	closeConnDB(db)
-	return true
+	return true*/
+	db := openConnDB()
+
+	ingredient := []Ingredients{}
+	query := "SELECT * FROM ingredients ORDER BY ingredient_id DESC LIMIT 1"
+	log.Println(query)
+	err := db.Select(&ingredient, query)
+
+	tx := db.MustBegin()
+	tx.NamedExec("INSERT INTO ingredients (ingredient_name, kcal, user_id) VALUES (:ingredient_name, :kcal, :user_id)", &i)
+	err = tx.Commit()
+
+	if err != nil {
+		return -1
+	}
+	closeConnDB(db)
+	log.Println(ingredient[0].Ingredient_id)
+	return ingredient[0].Ingredient_id+1
 }
 
 /**
