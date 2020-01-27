@@ -57,14 +57,18 @@ class InsertModal extends Component {
         axios.post("http://localhost:8000/api/insertIngredient", ingredient)
         .then(result => {
             if (result.data==true) {
-                this.setState({auxIngredients: this.props.ingredients}) //Preencher um array local com o array de ingredientes enviado pelo parent component
-                var ing= ingredient.ingredient_name;
-                var ing_id= ingredient.ingredient_id;
-                var ing_kcal=ingredient.kcal;
-                this.setState({auxIngredients: [...this.state.auxIngredients, {label: ing, value: ing_id, kcal: ing_kcal}]})    //adicionar ao array local o novo ingrediente 
-                this.props.handleChangeArray(this.state.auxIngredients) //chamar a função do parent component e enviar o array local (no parent component, esta função ira substituir o array de ingredientes por este array que lhe enviamos)
-                
-                this.closeModal();
+                axios.get("http://localhost:8000/api/searchIngredientName/name/"+ingredient.ingredient_name)
+                .then(resulti => {
+                    
+                    this.setState({auxIngredients: this.props.ingredients}) //Preencher um array local com o array de ingredientes enviado pelo parent component
+                    var ing= ingredient.ingredient_name;
+                    var ing_id= resulti.data[0].ingredient_id
+                    var ing_kcal=ingredient.kcal;
+                    this.setState({auxIngredients: [...this.state.auxIngredients, {label: ing, value: ing_id, kcal: ing_kcal}]})    //adicionar ao array local o novo ingrediente 
+                    this.props.handleChangeArray(this.state.auxIngredients) //chamar a função do parent component e enviar o array local (no parent component, esta função ira substituir o array de ingredientes por este array que lhe enviamos)
+                    console.log(ingredient);
+                    this.closeModal();
+                })
             }
         })
     }
